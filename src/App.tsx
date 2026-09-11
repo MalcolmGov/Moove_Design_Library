@@ -65,7 +65,7 @@ export default function App() {
             <button
               onClick={() => setActiveTab('dashboards')}
               className={cn(
-                'flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all',
+                'flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer',
                 activeTab === 'dashboards'
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : 'text-slate-400 hover:text-white'
@@ -78,7 +78,7 @@ export default function App() {
             <button
               onClick={() => setActiveTab('components')}
               className={cn(
-                'flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all',
+                'flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer',
                 activeTab === 'components'
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : 'text-slate-400 hover:text-white'
@@ -91,7 +91,7 @@ export default function App() {
             <button
               onClick={() => setActiveTab('tokens')}
               className={cn(
-                'flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all',
+                'flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer',
                 activeTab === 'tokens'
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : 'text-slate-400 hover:text-white'
@@ -108,6 +108,7 @@ export default function App() {
           <DashboardShell
             currentDashboardId={currentDashboardId}
             onSelectDashboard={(id) => setCurrentDashboardId(id)}
+            onSelectTab={(tab) => setActiveTab(tab)}
           >
             {renderDashboard()}
           </DashboardShell>

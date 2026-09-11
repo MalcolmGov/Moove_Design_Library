@@ -6,6 +6,7 @@ import { ProgressBarGroup } from '../charts/progress-bar-group';
 import { Card, CardHeader, CardTitle } from '../ui/card';
 import { Avatar } from '../ui/avatar';
 import { Badge } from '../ui/badge';
+import { KanbanBoard } from '../ui/kanban-board';
 
 export function ProjectManagementDashboard() {
   const projectProgress = [
@@ -104,7 +105,7 @@ export function ProjectManagementDashboard() {
           <div>
             <CardHeader className="mb-2">
               <CardTitle>Sprint Overview</CardTitle>
-              <span className="text-xs text-slate-400 font-semibold">Sprint 12 ▾</span>
+              <span className="text-xs text-slate-400 font-semibold">Sprint 14 ▾</span>
             </CardHeader>
             <div className="flex items-center justify-between text-xs text-slate-500 mb-2">
               <span>Jun 10, 2025 - Jun 24, 2025</span>
@@ -201,6 +202,11 @@ export function ProjectManagementDashboard() {
             ))}
           </div>
         </Card>
+      </div>
+
+      {/* Row 4: Interactive Kanban Board */}
+      <div className="pt-2">
+        <KanbanBoard />
       </div>
     </div>
   );

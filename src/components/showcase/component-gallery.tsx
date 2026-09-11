@@ -6,7 +6,9 @@ import {
   Sparkles,
   Layers,
   BarChart3,
-  Users
+  Users,
+  Table,
+  FolderKanban
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
@@ -17,6 +19,17 @@ import { Avatar, AvatarGroup } from '../ui/avatar';
 import { CircularGauge } from '../charts/circular-gauge';
 import { AreaSplineChart } from '../charts/area-spline-chart';
 import { DonutChart } from '../charts/donut-chart';
+import { DataTable, Column } from '../ui/data-table';
+import { KanbanBoard } from '../ui/kanban-board';
+
+interface DemoUser {
+  id: string;
+  name: string;
+  role: string;
+  department: string;
+  status: 'Active' | 'On Leave' | 'Contractor';
+  rating: number;
+}
 
 export function ComponentGallery() {
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
@@ -27,8 +40,47 @@ export function ComponentGallery() {
     setTimeout(() => setCopiedSection(null), 2000);
   };
 
+  const demoUsers: DemoUser[] = [
+    { id: '1', name: 'Alex Mercer', role: 'Staff Product Designer', department: 'Design Ops', status: 'Active', rating: 4.9 },
+    { id: '2', name: 'Sarah Chen', role: 'Frontend Engineer', department: 'Platform', status: 'Active', rating: 4.8 },
+    { id: '3', name: 'Marcus Bell', role: 'Product Manager', department: 'Growth', status: 'On Leave', rating: 4.6 },
+    { id: '4', name: 'Emma Wilson', role: 'Full Stack Developer', department: 'Core App', status: 'Active', rating: 4.7 },
+    { id: '5', name: 'Lucas Meyer', role: 'DevOps Architect', department: 'Infrastructure', status: 'Contractor', rating: 4.9 },
+  ];
+
+  const demoColumns: Column<DemoUser>[] = [
+    {
+      key: 'name',
+      header: 'Team Member',
+      sortable: true,
+      render: (u) => (
+        <div className="flex items-center gap-2">
+          <Avatar name={u.name} size="xs" />
+          <span className="font-bold text-slate-900 dark:text-white">{u.name}</span>
+        </div>
+      ),
+    },
+    { key: 'role', header: 'Role', sortable: true },
+    { key: 'department', header: 'Department', sortable: true },
+    {
+      key: 'status',
+      header: 'Status',
+      sortable: true,
+      align: 'right',
+      render: (u) => (
+        <Badge
+          variant={u.status === 'Active' ? 'success' : u.status === 'On Leave' ? 'warning' : 'info'}
+          size="sm"
+          dot
+        >
+          {u.status}
+        </Badge>
+      ),
+    },
+  ];
+
   return (
-    <div className="space-y-10 max-w-6xl mx-auto">
+    <div className="space-y-12 max-w-6xl mx-auto">
       <div>
         <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           Moove Component Library
@@ -38,6 +90,7 @@ export function ComponentGallery() {
         </p>
       </div>
 
+      {/* Metric Cards */}
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
@@ -49,7 +102,7 @@ export function ComponentGallery() {
           </div>
           <button
             onClick={() => copySnippet('stat-card', `<StatCard\n  title="Total Revenue"\n  value="$78,945"\n  change="+12.5%"\n  trend="up"\n  timeframe="vs last month"\n  icon={<DollarSign className="w-5 h-5" />}\n/>`)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer"
           >
             {copiedSection === 'stat-card' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
             <span>{copiedSection === 'stat-card' ? 'Copied Code!' : 'Copy React Code'}</span>
@@ -88,6 +141,42 @@ export function ComponentGallery() {
         </div>
       </section>
 
+      {/* Interactive DataTable */}
+      <section className="space-y-4">
+        <div>
+          <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Table className="w-4 h-4 text-indigo-600" />
+            Interactive Data Table
+          </h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Sortable headers, live instant filter, category tabs, and pagination</p>
+        </div>
+        <DataTable<DemoUser>
+          title="Team Directory"
+          description="Click column headers to sort ascending or descending"
+          data={demoUsers}
+          columns={demoColumns}
+          pageSize={4}
+          filterTabs={[
+            { label: 'All Staff', value: 'all', filterFn: () => true },
+            { label: 'Active', value: 'Active', filterFn: (u) => u.status === 'Active' },
+            { label: 'On Leave', value: 'On Leave', filterFn: (u) => u.status === 'On Leave' },
+          ]}
+        />
+      </section>
+
+      {/* Interactive Sprint Kanban Board */}
+      <section className="space-y-4">
+        <div>
+          <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <FolderKanban className="w-4 h-4 text-indigo-600" />
+            Interactive Sprint Kanban Board
+          </h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Multi-column workflow board with task progress and quick-stage advance</p>
+        </div>
+        <KanbanBoard />
+      </section>
+
+      {/* Buttons */}
       <section className="space-y-4">
         <div>
           <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -110,6 +199,7 @@ export function ComponentGallery() {
         </Card>
       </section>
 
+      {/* Status Badges */}
       <section className="space-y-4">
         <div>
           <h2 className="text-base font-bold text-slate-900 dark:text-white">Status Badges & Chips</h2>
@@ -129,6 +219,7 @@ export function ComponentGallery() {
         </Card>
       </section>
 
+      {/* Charts */}
       <section className="space-y-4">
         <div>
           <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -186,6 +277,7 @@ export function ComponentGallery() {
         </div>
       </section>
 
+      {/* Inputs & Avatars */}
       <section className="space-y-4">
         <div>
           <h2 className="text-base font-bold text-slate-900 dark:text-white">Inputs & Avatars</h2>

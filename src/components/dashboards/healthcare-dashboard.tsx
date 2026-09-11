@@ -7,6 +7,17 @@ import { DonutChart } from '../charts/donut-chart';
 import { Card, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Avatar } from '../ui/avatar';
+import { DataTable, Column } from '../ui/data-table';
+
+interface AdmissionRecord {
+  id: string;
+  name: string;
+  age: number;
+  dept: string;
+  date: string;
+  status: 'Stable' | 'Under Care' | 'Recovering' | 'Critical';
+  avatar: string;
+}
 
 export function HealthcareDashboard() {
   const patientVisits = [
@@ -32,11 +43,69 @@ export function HealthcareDashboard() {
     { label: 'Complications', value: 1, color: '#ef4444' },
   ];
 
-  const recentAdmissions = [
-    { name: 'Sarah Ali', age: 34, dept: 'General Medicine', date: 'Jun 28, 2025', status: 'Stable', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&auto=format&fit=crop&q=80' },
-    { name: 'Mohammed Raza', age: 67, dept: 'Cardiology', date: 'Jun 28, 2025', status: 'Under Care', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80' },
-    { name: 'Ayesha Khan', age: 12, dept: 'Pediatrics', date: 'Jun 27, 2025', status: 'Stable', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80' },
-    { name: 'Daniel Smith', age: 45, dept: 'Orthopedics', date: 'Jun 27, 2025', status: 'Recovering', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&auto=format&fit=crop&q=80' },
+  const recentAdmissions: AdmissionRecord[] = [
+    { id: 'ADM-101', name: 'Sarah Ali', age: 34, dept: 'General Medicine', date: 'Jun 28, 2025', status: 'Stable', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&auto=format&fit=crop&q=80' },
+    { id: 'ADM-102', name: 'Mohammed Raza', age: 67, dept: 'Cardiology', date: 'Jun 28, 2025', status: 'Under Care', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80' },
+    { id: 'ADM-103', name: 'Ayesha Khan', age: 12, dept: 'Pediatrics', date: 'Jun 27, 2025', status: 'Stable', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80' },
+    { id: 'ADM-104', name: 'Daniel Smith', age: 45, dept: 'Orthopedics', date: 'Jun 27, 2025', status: 'Recovering', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&auto=format&fit=crop&q=80' },
+    { id: 'ADM-105', name: 'Elena Rostova', age: 29, dept: 'Emergency', date: 'Jun 26, 2025', status: 'Under Care', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&auto=format&fit=crop&q=80' },
+    { id: 'ADM-106', name: 'Kenji Sato', age: 52, dept: 'Cardiology', date: 'Jun 26, 2025', status: 'Recovering', avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&auto=format&fit=crop&q=80' },
+  ];
+
+  const admissionColumns: Column<AdmissionRecord>[] = [
+    {
+      key: 'name',
+      header: 'Patient Name',
+      sortable: true,
+      render: (row) => (
+        <div className="flex items-center gap-2.5">
+          <Avatar src={row.avatar} name={row.name} size="xs" />
+          <div>
+            <span className="font-bold text-slate-900 dark:text-white block">{row.name}</span>
+            <span className="text-[10px] text-slate-400">ID: {row.id}</span>
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: 'age',
+      header: 'Age',
+      sortable: true,
+      render: (row) => <span className="font-semibold text-slate-700 dark:text-slate-300">{row.age} yrs</span>,
+    },
+    {
+      key: 'dept',
+      header: 'Department',
+      sortable: true,
+      render: (row) => <span className="text-slate-600 dark:text-slate-400 font-medium">{row.dept}</span>,
+    },
+    {
+      key: 'date',
+      header: 'Admission Date',
+      sortable: true,
+      render: (row) => <span className="text-slate-500 dark:text-slate-400 text-[11px]">{row.date}</span>,
+    },
+    {
+      key: 'status',
+      header: 'Status',
+      sortable: true,
+      align: 'right',
+      render: (row) => (
+        <Badge
+          variant={
+            row.status === 'Stable'
+              ? 'success'
+              : row.status === 'Recovering'
+              ? 'info'
+              : 'warning'
+          }
+          size="sm"
+          dot
+        >
+          {row.status}
+        </Badge>
+      ),
+    },
   ];
 
   const doctorSchedule = [
@@ -189,34 +258,23 @@ export function HealthcareDashboard() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader className="mb-3">
-            <CardTitle>Recent Admissions</CardTitle>
-            <span className="text-xs text-sky-600 dark:text-sky-400 hover:underline cursor-pointer font-bold">
-              View all
-            </span>
-          </CardHeader>
-          <div className="space-y-3">
-            {recentAdmissions.map((patient, i) => (
-              <div key={i} className="flex items-center justify-between text-xs py-2 border-b border-slate-100/80 dark:border-slate-800/80 last:border-0">
-                <div className="flex items-center gap-2.5">
-                  <Avatar src={patient.avatar} name={patient.name} size="xs" />
-                  <div>
-                    <h5 className="font-bold text-slate-800 dark:text-slate-100">{patient.name}</h5>
-                    <p className="text-[10px] text-slate-400">{patient.age} yrs • {patient.dept}</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <Badge variant={patient.status === 'Stable' ? 'success' : patient.status === 'Recovering' ? 'info' : 'warning'} size="sm" dot>
-                    {patient.status}
-                  </Badge>
-                  <p className="text-[10px] text-slate-400 mt-0.5">{patient.date}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
+      {/* Row 4: Interactive Admissions DataTable & Schedule */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <DataTable<AdmissionRecord>
+            title="Recent Admissions"
+            description="Patient admissions with clinical status filter"
+            data={recentAdmissions}
+            columns={admissionColumns}
+            pageSize={4}
+            filterTabs={[
+              { label: 'All Patients', value: 'all', filterFn: () => true },
+              { label: 'Stable', value: 'Stable', filterFn: (p) => p.status === 'Stable' },
+              { label: 'Under Care', value: 'Under Care', filterFn: (p) => p.status === 'Under Care' },
+              { label: 'Recovering', value: 'Recovering', filterFn: (p) => p.status === 'Recovering' },
+            ]}
+          />
+        </div>
 
         <Card>
           <CardHeader className="mb-3">

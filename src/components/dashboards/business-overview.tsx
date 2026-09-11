@@ -6,6 +6,18 @@ import { DonutChart } from '../charts/donut-chart';
 import { Badge } from '../ui/badge';
 import { Avatar } from '../ui/avatar';
 import { Card, CardHeader, CardTitle } from '../ui/card';
+import { DataTable, Column } from '../ui/data-table';
+
+interface OrderRecord {
+  id: string;
+  customer: string;
+  avatar: string;
+  product: string;
+  amount: string;
+  rawAmount: number;
+  status: 'Delivered' | 'Shipped' | 'Processing';
+  date: string;
+}
 
 export function BusinessOverviewDashboard() {
   const splineData = [
@@ -30,46 +42,143 @@ export function BusinessOverviewDashboard() {
     { label: 'Beauty', value: 17370, color: '#8b5cf6' },
   ];
 
-  const recentOrders = [
+  const ordersData: OrderRecord[] = [
     {
       id: '#10421',
       customer: 'Sarah Khan',
       avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&auto=format&fit=crop&q=80',
-      product: 'Wireless Headphones',
+      product: 'Wireless Noise-Canceling Headphones',
       amount: '$129.00',
-      status: 'Delivered' as const,
+      rawAmount: 129.0,
+      status: 'Delivered',
+      date: '10m ago',
     },
     {
       id: '#10420',
       customer: 'James Lee',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80',
-      product: 'Smart Watch',
+      product: 'Smart Watch Series 7 Titanium',
       amount: '$249.00',
-      status: 'Shipped' as const,
+      rawAmount: 249.0,
+      status: 'Shipped',
+      date: '35m ago',
     },
     {
       id: '#10419',
       customer: 'Priya Sharma',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80',
-      product: 'Minimal Backpack',
+      product: 'Minimal Waterproof Backpack',
       amount: '$89.00',
-      status: 'Processing' as const,
+      rawAmount: 89.0,
+      status: 'Processing',
+      date: '1h ago',
     },
     {
       id: '#10418',
       customer: 'Daniel Kim',
       avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&auto=format&fit=crop&q=80',
-      product: 'Running Shoes',
+      product: 'Ultralight Running Shoes',
       amount: '$120.00',
-      status: 'Delivered' as const,
+      rawAmount: 120.0,
+      status: 'Delivered',
+      date: '2h ago',
     },
     {
       id: '#10417',
       customer: 'Emma Wilson',
       avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&auto=format&fit=crop&q=80',
-      product: 'Leather Wallet',
+      product: 'Bifold Italian Leather Wallet',
       amount: '$59.00',
-      status: 'Shipped' as const,
+      rawAmount: 59.0,
+      status: 'Shipped',
+      date: '3h ago',
+    },
+    {
+      id: '#10416',
+      customer: 'Lucas Meyer',
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&auto=format&fit=crop&q=80',
+      product: 'Mechanical Ergonomic Keyboard',
+      amount: '$189.00',
+      rawAmount: 189.0,
+      status: 'Delivered',
+      date: '4h ago',
+    },
+    {
+      id: '#10415',
+      customer: 'Amina Diallo',
+      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&auto=format&fit=crop&q=80',
+      product: 'Ceramic Pour-Over Coffee Set',
+      amount: '$45.00',
+      rawAmount: 45.0,
+      status: 'Processing',
+      date: '5h ago',
+    },
+    {
+      id: '#10414',
+      customer: 'Carlos Gomez',
+      avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=80&auto=format&fit=crop&q=80',
+      product: 'Studio Monitor Speakers 5-inch',
+      amount: '$320.00',
+      rawAmount: 320.0,
+      status: 'Shipped',
+      date: '6h ago',
+    },
+  ];
+
+  const orderColumns: Column<OrderRecord>[] = [
+    {
+      key: 'id',
+      header: 'Order ID',
+      sortable: true,
+      render: (row) => <span className="font-semibold text-slate-800 dark:text-slate-200">{row.id}</span>,
+    },
+    {
+      key: 'customer',
+      header: 'Customer',
+      sortable: true,
+      render: (row) => (
+        <div className="flex items-center gap-2.5">
+          <Avatar src={row.avatar} name={row.customer} size="xs" />
+          <div>
+            <span className="font-bold text-slate-900 dark:text-white block">{row.customer}</span>
+            <span className="text-[10px] text-slate-400">{row.date}</span>
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: 'product',
+      header: 'Product',
+      sortable: true,
+      render: (row) => <span className="text-slate-600 dark:text-slate-400 font-medium truncate max-w-[180px] block">{row.product}</span>,
+    },
+    {
+      key: 'rawAmount',
+      header: 'Amount',
+      sortable: true,
+      align: 'right',
+      render: (row) => <span className="font-extrabold text-slate-900 dark:text-white">{row.amount}</span>,
+    },
+    {
+      key: 'status',
+      header: 'Status',
+      sortable: true,
+      align: 'right',
+      render: (row) => (
+        <Badge
+          variant={
+            row.status === 'Delivered'
+              ? 'success'
+              : row.status === 'Shipped'
+              ? 'info'
+              : 'warning'
+          }
+          size="sm"
+          dot
+        >
+          {row.status}
+        </Badge>
+      ),
     },
   ];
 
@@ -168,59 +277,23 @@ export function BusinessOverviewDashboard() {
         </Card>
       </div>
 
-      {/* Row 3: Recent Orders Table & Top Markets */}
+      {/* Row 3: Interactive Orders DataTable & Top Markets */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2">
-          <CardHeader className="mb-3">
-            <CardTitle>Recent Orders</CardTitle>
-            <span className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer font-bold">
-              View all orders →
-            </span>
-          </CardHeader>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
-                  <th className="pb-3">Order ID</th>
-                  <th className="pb-3">Customer</th>
-                  <th className="pb-3">Product</th>
-                  <th className="pb-3">Amount</th>
-                  <th className="pb-3 text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100/80 dark:divide-slate-800/80">
-                {recentOrders.map((order) => (
-                  <tr key={order.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
-                    <td className="py-3 font-semibold text-slate-700 dark:text-slate-300">{order.id}</td>
-                    <td className="py-3">
-                      <div className="flex items-center gap-2.5">
-                        <Avatar src={order.avatar} name={order.customer} size="xs" />
-                        <span className="font-bold text-slate-900 dark:text-white">{order.customer}</span>
-                      </div>
-                    </td>
-                    <td className="py-3 text-slate-600 dark:text-slate-400 font-medium">{order.product}</td>
-                    <td className="py-3 font-extrabold text-slate-900 dark:text-white">{order.amount}</td>
-                    <td className="py-3 text-right">
-                      <Badge
-                        variant={
-                          order.status === 'Delivered'
-                            ? 'success'
-                            : order.status === 'Shipped'
-                            ? 'info'
-                            : 'warning'
-                        }
-                        size="sm"
-                        dot
-                      >
-                        {order.status}
-                      </Badge>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
+        <div className="lg:col-span-2">
+          <DataTable<OrderRecord>
+            title="Recent Orders"
+            description="Live transactional record with instant sort & status filters"
+            data={ordersData}
+            columns={orderColumns}
+            pageSize={5}
+            filterTabs={[
+              { label: 'All Orders', value: 'all', filterFn: () => true },
+              { label: 'Delivered', value: 'Delivered', filterFn: (o) => o.status === 'Delivered' },
+              { label: 'Shipped', value: 'Shipped', filterFn: (o) => o.status === 'Shipped' },
+              { label: 'Processing', value: 'Processing', filterFn: (o) => o.status === 'Processing' },
+            ]}
+          />
+        </div>
 
         {/* Top Markets */}
         <Card>
