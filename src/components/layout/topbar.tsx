@@ -1,4 +1,4 @@
-import { Bell, ChevronDown, Calendar, Palette, Moon, Sun, Code2 } from 'lucide-react';
+import { Bell, ChevronDown, Calendar, Palette, Moon, Sun, Code2, Menu } from 'lucide-react';
 import { SearchInput } from '../ui/input';
 import { Avatar } from '../ui/avatar';
 import { useTheme } from '../../lib/theme-context';
@@ -9,6 +9,7 @@ export interface TopbarProps {
   onOpenNotifications?: () => void;
   onOpenDateModal?: () => void;
   onOpenCodeDrawer?: () => void;
+  onOpenMobileSidebar?: () => void;
   userName?: string;
   userRole?: string;
   currentDateRange?: string;
@@ -20,6 +21,7 @@ export function Topbar({
   onOpenNotifications,
   onOpenDateModal,
   onOpenCodeDrawer,
+  onOpenMobileSidebar,
   userName = 'Alex Mercer',
   userRole = 'Product Director',
   currentDateRange = 'Jun 1, 2025 - Jun 30, 2025',
@@ -27,15 +29,26 @@ export function Topbar({
   const { currentTheme, isDarkMode, toggleDarkMode } = useTheme();
 
   return (
-    <header className="h-16 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 px-6 flex items-center justify-between gap-4 sticky top-0 z-20 transition-colors">
-      {/* Search Bar - Clicking triggers Command Palette */}
-      <div className="w-full max-w-md cursor-pointer" onClick={onOpenCommandPalette}>
-        <SearchInput
-          placeholder="Search anything... (⌘K)"
-          readOnly
-          onClick={onOpenCommandPalette}
-          className="cursor-pointer"
-        />
+    <header className="h-16 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 px-4 sm:px-6 flex items-center justify-between gap-4 sticky top-0 z-20 transition-colors">
+      <div className="flex items-center gap-3 w-full max-w-md">
+        {/* Mobile Hamburger Menu Toggle */}
+        <button
+          onClick={onOpenMobileSidebar}
+          className="lg:hidden p-2 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer shrink-0"
+          title="Open Dashboards Menu"
+        >
+          <Menu className="w-4 h-4" />
+        </button>
+
+        {/* Search Bar - Clicking triggers Command Palette */}
+        <div className="w-full cursor-pointer" onClick={onOpenCommandPalette}>
+          <SearchInput
+            placeholder="Search... (⌘K)"
+            readOnly
+            onClick={onOpenCommandPalette}
+            className="cursor-pointer"
+          />
+        </div>
       </div>
 
       {/* Right Controls */}

@@ -6,7 +6,8 @@ import {
   Search, 
   ChevronLeft, 
   ChevronRight,
-  Filter
+  Filter,
+  Download
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
@@ -31,6 +32,7 @@ export interface DataTableProps<T> {
   title?: string;
   description?: string;
   actions?: React.ReactNode;
+  enableExport?: boolean;
 }
 
 export function DataTable<T extends Record<string, any>>({
@@ -45,12 +47,39 @@ export function DataTable<T extends Record<string, any>>({
   title,
   description,
   actions,
+  enableExport = true,
 }: DataTableProps<T>) {
   const [query, setQuery] = useState('');
   const [activeTab, setActiveTab] = useState<string>(filterTabs?.[0]?.value || 'all');
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
+
+  const handleExportCSV = () => {
+    const visibleColumns = columns.filter((c) => c.key);
+    const headers = visibleColumns.map((c) => `"${c.header.replace(/"/g, '""')}"`).join(',');
+
+    const rows = sortedData.map((row) =>
+      visibleColumns
+        .map((col) => {
+          const val = row[col.key];
+          const cleanVal = val === null || val === undefined ? '' : String(val);
+          return `"${cleanVal.replace(/"/g, '""')}"`;
+        })
+        .join(',')
+    );
+
+    const csvString = [headers, ...rows].join('\n');
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `${(title || 'export').toLowerCase().replace(/\s+/g, '_')}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   // 1. Filter by Tab
   const tabFilteredData = useMemo(() => {
@@ -129,13 +158,25 @@ export function DataTable<T extends Record<string, any>>({
     <div className={cn('bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-2xs transition-colors', className)}>
       {/* Top Header & Search/Filter Bar */}
       <div className="p-4 md:p-5 border-b border-slate-100 dark:border-slate-800/80 space-y-3">
-        {(title || actions) && (
+        {(title || actions || enableExport) && (
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               {title && <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">{title}</h3>}
               {description && <p className="text-xs text-slate-400 mt-0.5">{description}</p>}
             </div>
-            {actions && <div className="flex items-center gap-2">{actions}</div>}
+            <div className="flex items-center gap-2 shrink-0">
+              {enableExport && (
+                <button
+                  onClick={handleExportCSV}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-2xs cursor-pointer"
+                  title="Download CSV spreadsheet"
+                >
+                  <Download className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Export CSV</span>
+                </button>
+              )}
+              {actions}
+            </div>
           </div>
         )}
 

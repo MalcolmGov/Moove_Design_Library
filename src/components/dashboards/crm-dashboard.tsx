@@ -5,6 +5,20 @@ import { DonutChart } from '../charts/donut-chart';
 import { AreaSplineChart } from '../charts/area-spline-chart';
 import { Card, CardHeader, CardTitle } from '../ui/card';
 import { Avatar } from '../ui/avatar';
+import { Badge } from '../ui/badge';
+import { DataTable, Column } from '../ui/data-table';
+
+interface DealRecord {
+  id: string;
+  client: string;
+  company: string;
+  avatar: string;
+  stage: 'Closed Won' | 'Proposal' | 'Qualified' | 'Negotiation';
+  value: string;
+  rawValue: number;
+  probability: string;
+  closeDate: string;
+}
 
 export function CRMDashboard() {
   const pipelineStages = [
@@ -46,19 +60,137 @@ export function CRMDashboard() {
     { sender: 'Daniel Kim', text: 'Great! Looking forward to it.', time: 'Jun 8', online: true },
   ];
 
+  const dealsData: DealRecord[] = [
+    {
+      id: 'D-801',
+      client: 'Sarah Khan',
+      company: 'Acme Technologies',
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&auto=format&fit=crop&q=80',
+      stage: 'Closed Won',
+      value: '$34,500',
+      rawValue: 34500,
+      probability: '100%',
+      closeDate: 'Jun 10, 2025',
+    },
+    {
+      id: 'D-802',
+      client: 'James Lee',
+      company: 'Nova Digital Studio',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80',
+      stage: 'Negotiation',
+      value: '$48,000',
+      rawValue: 48000,
+      probability: '80%',
+      closeDate: 'Jun 16, 2025',
+    },
+    {
+      id: 'D-803',
+      client: 'Priya Sharma',
+      company: 'Apex Cloud Solutions',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80',
+      stage: 'Proposal',
+      value: '$22,400',
+      rawValue: 22400,
+      probability: '65%',
+      closeDate: 'Jun 20, 2025',
+    },
+    {
+      id: 'D-804',
+      client: 'Daniel Kim',
+      company: 'Starlight Media Co.',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&auto=format&fit=crop&q=80',
+      stage: 'Qualified',
+      value: '$15,800',
+      rawValue: 15800,
+      probability: '45%',
+      closeDate: 'Jun 25, 2025',
+    },
+    {
+      id: 'D-805',
+      client: 'Emma Watson',
+      company: 'Horizon Financial Group',
+      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&auto=format&fit=crop&q=80',
+      stage: 'Closed Won',
+      value: '$62,000',
+      rawValue: 62000,
+      probability: '100%',
+      closeDate: 'Jun 05, 2025',
+    },
+  ];
+
+  const dealColumns: Column<DealRecord>[] = [
+    {
+      key: 'client',
+      header: 'Client & Company',
+      sortable: true,
+      render: (deal) => (
+        <div className="flex items-center gap-2.5">
+          <Avatar src={deal.avatar} name={deal.client} size="xs" />
+          <div>
+            <span className="font-bold text-slate-900 dark:text-white block">{deal.client}</span>
+            <span className="text-[10px] text-slate-400">{deal.company}</span>
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: 'stage',
+      header: 'Stage',
+      sortable: true,
+      render: (deal) => (
+        <Badge
+          variant={
+            deal.stage === 'Closed Won'
+              ? 'success'
+              : deal.stage === 'Negotiation'
+              ? 'warning'
+              : deal.stage === 'Proposal'
+              ? 'info'
+              : 'neutral'
+          }
+          size="sm"
+          dot
+        >
+          {deal.stage}
+        </Badge>
+      ),
+    },
+    {
+      key: 'rawValue',
+      header: 'Value',
+      sortable: true,
+      align: 'right',
+      render: (deal) => <span className="font-extrabold text-slate-900 dark:text-white">{deal.value}</span>,
+    },
+    {
+      key: 'probability',
+      header: 'Win Rate',
+      sortable: true,
+      align: 'center',
+      render: (deal) => <span className="font-bold text-indigo-600 dark:text-indigo-400">{deal.probability}</span>,
+    },
+    {
+      key: 'closeDate',
+      header: 'Expected Close',
+      sortable: true,
+      align: 'right',
+      render: (deal) => <span className="text-slate-400 text-[11px]">{deal.closeDate}</span>,
+    },
+  ];
+
   return (
     <div className="space-y-6">
       <PageHeader
         greeting="Good Morning,"
         title="Here's your CRM overview"
-        description="Manage your leads, track deals and build lasting customer relationships."
+        description="Track your leads, pipeline conversion and customer growth."
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <StatCard
           title="Total Leads"
           value="4,320"
-          change="+18.3%"
+          change="+18.2%"
           trend="up"
           timeframe="vs last month"
           icon={<Target className="w-5 h-5 stroke-[2.5]" />}
@@ -105,6 +237,7 @@ export function CRMDashboard() {
         />
       </div>
 
+      {/* Row 2: Sales Pipeline & Deal Stages */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-2">
           <CardHeader>
@@ -139,6 +272,25 @@ export function CRMDashboard() {
         </Card>
       </div>
 
+      {/* Row 3: Interactive Deals DataTable */}
+      <div>
+        <DataTable<DealRecord>
+          title="Active Client Deals & Opportunities"
+          description="Live sales pipeline transactions with 1-click CSV export"
+          data={dealsData}
+          columns={dealColumns}
+          pageSize={5}
+          filterTabs={[
+            { label: 'All Deals', value: 'all', filterFn: () => true },
+            { label: 'Closed Won', value: 'Closed Won', filterFn: (d) => d.stage === 'Closed Won' },
+            { label: 'Negotiation', value: 'Negotiation', filterFn: (d) => d.stage === 'Negotiation' },
+            { label: 'Proposal', value: 'Proposal', filterFn: (d) => d.stage === 'Proposal' },
+            { label: 'Qualified', value: 'Qualified', filterFn: (d) => d.stage === 'Qualified' },
+          ]}
+        />
+      </div>
+
+      {/* Row 4: Acquisition & Tasks */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card>
           <CardHeader>

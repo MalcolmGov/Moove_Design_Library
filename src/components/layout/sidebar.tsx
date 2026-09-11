@@ -3,14 +3,15 @@ import {
   Users, 
   Layers, 
   Settings, 
-  HelpCircle,
-  FolderKanban,
-  Building2,
-  Stethoscope,
-  GraduationCap,
-  Wallet,
-  ShoppingBag,
-  Megaphone
+  HelpCircle, 
+  FolderKanban, 
+  Building2, 
+  Stethoscope, 
+  GraduationCap, 
+  Wallet, 
+  ShoppingBag, 
+  Megaphone,
+  X
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../lib/theme-context';
@@ -21,6 +22,7 @@ export interface SidebarProps {
   brandName?: string;
   brandSubtitle?: string;
   brandLogoUrl?: string;
+  onCloseMobile?: () => void;
   className?: string;
 }
 
@@ -30,6 +32,7 @@ export function Sidebar({
   brandName = 'Moove Digital',
   brandSubtitle = 'Design Library',
   brandLogoUrl,
+  onCloseMobile,
   className,
 }: SidebarProps) {
   const { currentTheme } = useTheme();
@@ -47,6 +50,13 @@ export function Sidebar({
     { id: 'marketing', label: 'Marketing & Growth', icon: Megaphone },
   ];
 
+  const handleSelect = (id: string) => {
+    onSelectDashboard?.(id);
+    if (onCloseMobile) {
+      onCloseMobile();
+    }
+  };
+
   return (
     <aside
       className={cn(
@@ -56,32 +66,44 @@ export function Sidebar({
     >
       {/* Brand Header */}
       <div>
-        <div className="p-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
-          {brandLogoUrl ? (
-            <div className="w-9 h-9 rounded-xl overflow-hidden bg-white dark:bg-slate-800 p-1 border border-slate-200/80 dark:border-slate-700 shadow-2xs shrink-0 flex items-center justify-center">
-              <img
-                src={brandLogoUrl}
-                alt={brandName}
-                className="w-full h-full object-contain rounded-lg"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
+        <div className="p-5 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+          <div className="flex items-center gap-3 min-w-0">
+            {brandLogoUrl ? (
+              <div className="w-9 h-9 rounded-xl overflow-hidden bg-white dark:bg-slate-800 p-1 border border-slate-200/80 dark:border-slate-700 shadow-2xs shrink-0 flex items-center justify-center">
+                <img
+                  src={brandLogoUrl}
+                  alt={brandName}
+                  className="w-full h-full object-contain rounded-lg"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              </div>
+            ) : (
+              <div
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-xs shrink-0"
+                style={{ backgroundColor: currentTheme.primaryColor }}
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                </svg>
+              </div>
+            )}
+            <div className="min-w-0">
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-none truncate">{brandName}</h2>
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-1 truncate">{brandSubtitle}</p>
             </div>
-          ) : (
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-xs shrink-0"
-              style={{ backgroundColor: currentTheme.primaryColor }}
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-              </svg>
-            </div>
-          )}
-          <div className="min-w-0">
-            <h2 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-none truncate">{brandName}</h2>
-            <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-1 truncate">{brandSubtitle}</p>
           </div>
+
+          {/* Close button for mobile drawer */}
+          {onCloseMobile && (
+            <button
+              onClick={onCloseMobile}
+              className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
         </div>
 
         {/* Dashboards Navigation */}
@@ -96,9 +118,9 @@ export function Sidebar({
               return (
                 <button
                   key={dash.id}
-                  onClick={() => onSelectDashboard?.(dash.id)}
+                  onClick={() => handleSelect(dash.id)}
                   className={cn(
-                    'w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all text-left group',
+                    'w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all text-left group cursor-pointer',
                     isActive
                       ? 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 font-semibold shadow-2xs'
                       : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100'

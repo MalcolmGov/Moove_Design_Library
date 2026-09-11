@@ -155,16 +155,39 @@ export function DashboardShell({
     });
   };
 
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
   return (
     <div className="min-h-screen flex bg-slate-50/70 dark:bg-slate-950 font-sans transition-colors duration-200">
-      {/* Sidebar Navigation */}
-      <Sidebar
-        currentDashboardId={currentDashboardId}
-        onSelectDashboard={onSelectDashboard}
-        brandName={brandName}
-        brandSubtitle="Design Library"
-        brandLogoUrl={brandLogoUrl}
-      />
+      {/* Desktop Sticky Sidebar Navigation */}
+      <div className="hidden lg:block">
+        <Sidebar
+          currentDashboardId={currentDashboardId}
+          onSelectDashboard={onSelectDashboard}
+          brandName={brandName}
+          brandSubtitle="Design Library"
+          brandLogoUrl={brandLogoUrl}
+        />
+      </div>
+
+      {/* Mobile Slide-Over Sidebar Drawer */}
+      {isMobileSidebarOpen && (
+        <div className="fixed inset-0 z-50 flex lg:hidden bg-slate-950/60 backdrop-blur-xs animate-fade-in">
+          <Sidebar
+            currentDashboardId={currentDashboardId}
+            onSelectDashboard={onSelectDashboard}
+            brandName={brandName}
+            brandSubtitle="Design Library"
+            brandLogoUrl={brandLogoUrl}
+            onCloseMobile={() => setIsMobileSidebarOpen(false)}
+            className="w-72 shadow-2xl h-full"
+          />
+          <div
+            className="flex-1"
+            onClick={() => setIsMobileSidebarOpen(false)}
+          />
+        </div>
+      )}
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
@@ -174,9 +197,10 @@ export function DashboardShell({
           onOpenNotifications={() => setIsNotificationsOpen(true)}
           onOpenDateModal={() => setIsDateModalOpen(true)}
           onOpenCodeDrawer={handleOpenCode}
+          onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)}
           currentDateRange={currentDateRange}
         />
-        <main className="p-6 md:p-8 flex-1">{children}</main>
+        <main className="p-4 sm:p-6 md:p-8 flex-1">{children}</main>
       </div>
 
       {/* Command Palette Overlay */}
