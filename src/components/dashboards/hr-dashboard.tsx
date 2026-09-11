@@ -1,0 +1,215 @@
+import { Users, Briefcase, UserPlus, Zap } from 'lucide-react';
+import { PageHeader } from '../layout/page-header';
+import { StatCard } from '../ui/stat-card';
+import { FunnelChart } from '../charts/funnel-chart';
+import { CircularGauge } from '../charts/circular-gauge';
+import { DonutChart } from '../charts/donut-chart';
+import { AreaSplineChart } from '../charts/area-spline-chart';
+import { Card, CardHeader, CardTitle } from '../ui/card';
+import { Avatar } from '../ui/avatar';
+import { Badge } from '../ui/badge';
+
+export function HRDashboard() {
+  const hiringFunnel = [
+    { label: 'Applications', value: 1240, color: '#34d399' },
+    { label: 'Screened', value: 420, color: '#10b981' },
+    { label: 'Interviews', value: 128, color: '#059669' },
+    { label: 'Offers', value: 36, color: '#047857' },
+    { label: 'Hired', value: 12, color: '#064e3b' },
+  ];
+
+  const departmentSegments = [
+    { label: 'Engineering', value: 70, color: '#6366f1' },
+    { label: 'Marketing', value: 45, color: '#ec4899' },
+    { label: 'Product', value: 40, color: '#06b6d4' },
+    { label: 'Sales', value: 35, color: '#10b981' },
+    { label: 'HR & Ops', value: 58, color: '#f59e0b' },
+  ];
+
+  const upcomingInterviews = [
+    { name: 'Ayesha Malik', role: 'Frontend Developer', date: 'Jun 3, 2025 • 10:00 AM', status: 'Interview', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80' },
+    { name: 'Daniel Park', role: 'Product Designer', date: 'Jun 3, 2025 • 02:00 PM', status: 'Interview', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80' },
+    { name: 'Priya Mehta', role: 'Marketing Specialist', date: 'Jun 4, 2025 • 11:30 AM', status: 'Screening', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&auto=format&fit=crop&q=80' },
+    { name: 'Liam Carter', role: 'Data Analyst', date: 'Jun 4, 2025 • 03:00 PM', status: 'Interview', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&auto=format&fit=crop&q=80' },
+  ];
+
+  const onboardingTracker = [
+    { name: 'Noah Wilson', role: 'UX Designer', progress: 85, avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&auto=format&fit=crop&q=80' },
+    { name: 'Zara Ali', role: 'HR Associate', progress: 70, avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=80&auto=format&fit=crop&q=80' },
+    { name: 'Ethan Brooks', role: 'DevOps Engineer', progress: 40, avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=80&auto=format&fit=crop&q=80' },
+    { name: 'Maya Singh', role: 'Content Writer', progress: 20, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&auto=format&fit=crop&q=80' },
+  ];
+
+  const workforceTrend = [
+    { label: 'Jan', value: 200 },
+    { label: 'Feb', value: 210 },
+    { label: 'Mar', value: 215 },
+    { label: 'Apr', value: 228 },
+    { label: 'May', value: 236 },
+    { label: 'Jun', value: 248 },
+  ];
+
+  return (
+    <div className="space-y-6">
+      <PageHeader
+        greeting="Good Morning,"
+        title="Here's your HR overview"
+        description="Build amazing teams, track hiring pipeline, and create better workplaces."
+      />
+
+      {/* 4 Metric Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <StatCard
+          title="Total Employees"
+          value="248"
+          change="+6.4%"
+          trend="up"
+          timeframe="vs last month"
+          icon={<Users className="w-5 h-5" />}
+          iconColor="text-emerald-600"
+          iconBg="bg-emerald-50"
+        />
+        <StatCard
+          title="Open Roles"
+          value="18"
+          change="+28.6%"
+          trend="up"
+          timeframe="vs last month"
+          icon={<Briefcase className="w-5 h-5" />}
+          iconColor="text-blue-600"
+          iconBg="bg-blue-50"
+        />
+        <StatCard
+          title="New Hires"
+          value="12"
+          change="+33.3%"
+          trend="up"
+          timeframe="vs last month"
+          icon={<UserPlus className="w-5 h-5" />}
+          iconColor="text-teal-600"
+          iconBg="bg-teal-50"
+        />
+        <StatCard
+          title="Engagement Score"
+          value="8.6"
+          change="+4.9%"
+          trend="up"
+          timeframe="vs last quarter"
+          icon={<Zap className="w-5 h-5" />}
+          iconColor="text-emerald-600"
+          iconBg="bg-emerald-50"
+        />
+      </div>
+
+      {/* Row 2: Hiring Funnel, Attendance Gauge, Department Donut */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card className="p-6">
+          <FunnelChart stages={hiringFunnel} title="Hiring Funnel" />
+        </Card>
+
+        <Card className="p-6 flex flex-col justify-between">
+          <CardHeader className="mb-2">
+            <CardTitle>Attendance Summary</CardTitle>
+            <span className="text-xs text-slate-400 font-medium">This Month</span>
+          </CardHeader>
+          <CircularGauge
+            percentage={92}
+            label="Present Rate"
+            color="#10b981"
+            secondaryStats={[
+              { label: 'Present', value: '92%', color: '#10b981' },
+              { label: 'Late', value: '5%', color: '#f59e0b' },
+              { label: 'Absent', value: '3%', color: '#ef4444' },
+            ]}
+          />
+        </Card>
+
+        <Card className="p-6">
+          <DonutChart
+            data={departmentSegments}
+            centerValue="248"
+            centerLabel="Employees"
+            title="Employees by Department"
+            legendPosition="bottom"
+          />
+        </Card>
+      </div>
+
+      {/* Row 3: Upcoming Interviews, Onboarding Tracker & Workforce Analytics */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="p-6">
+          <CardHeader className="mb-3">
+            <CardTitle>Upcoming Interviews</CardTitle>
+            <span className="text-xs text-indigo-600 font-medium cursor-pointer">View all</span>
+          </CardHeader>
+          <div className="space-y-3">
+            {upcomingInterviews.map((item, idx) => (
+              <div key={idx} className="flex items-center justify-between text-xs py-1.5 border-b border-slate-50 last:border-0">
+                <div className="flex items-center gap-2.5">
+                  <Avatar src={item.avatar} name={item.name} size="xs" />
+                  <div>
+                    <p className="font-semibold text-slate-800">{item.name}</p>
+                    <p className="text-[10px] text-slate-400">{item.role}</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <Badge variant={item.status === 'Interview' ? 'info' : 'primary'} size="sm">
+                    {item.status}
+                  </Badge>
+                  <p className="text-[10px] text-slate-400 mt-1">{item.date.split('•')[0]}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <CardHeader className="mb-3">
+            <CardTitle>Onboarding Tracker</CardTitle>
+            <span className="text-xs text-indigo-600 font-medium cursor-pointer">View all</span>
+          </CardHeader>
+          <div className="space-y-3.5">
+            {onboardingTracker.map((person, idx) => (
+              <div key={idx} className="space-y-1.5">
+                <div className="flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2">
+                    <Avatar src={person.avatar} name={person.name} size="xs" />
+                    <div>
+                      <p className="font-medium text-slate-800">{person.name}</p>
+                      <p className="text-[10px] text-slate-400">{person.role}</p>
+                    </div>
+                  </div>
+                  <span className="font-bold text-slate-700">{person.progress}%</span>
+                </div>
+                <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-emerald-500 transition-all duration-500"
+                    style={{ width: `${person.progress}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900">Workforce Analytics</h3>
+              <p className="text-xs font-semibold text-emerald-600 mt-0.5">+18% Employee Growth</p>
+            </div>
+            <span className="text-xs text-slate-400">Last 6 Months</span>
+          </div>
+          <AreaSplineChart
+            data={workforceTrend}
+            color="#10b981"
+            gradientId="hrSpline"
+            valuePrefix=""
+            valueSuffix=" staff"
+            filterOptions={[]}
+          />
+        </Card>
+      </div>
+    </div>
+  );
+}
