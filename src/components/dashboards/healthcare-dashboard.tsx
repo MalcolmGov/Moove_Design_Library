@@ -61,9 +61,11 @@ export function HealthcareDashboard() {
           change="+12.5%"
           trend="up"
           timeframe="vs last month"
-          icon={<Users className="w-5 h-5" />}
+          icon={<Users className="w-5 h-5 stroke-[2.5]" />}
           iconColor="text-sky-600 dark:text-sky-400"
-          iconBg="bg-sky-50 dark:bg-sky-950/50"
+          iconBg="bg-gradient-to-br from-sky-50 to-sky-100/70 border-sky-200/80 dark:from-sky-950/60 dark:to-sky-900/30 dark:border-sky-800/80"
+          glowColor="from-sky-500/20 dark:from-sky-500/25"
+          sparklineData={[10, 11, 11.5, 11.8, 12.1, 12.4]}
         />
         <StatCard
           title="Appointments"
@@ -71,9 +73,11 @@ export function HealthcareDashboard() {
           change="+8.3%"
           trend="up"
           timeframe="vs last month"
-          icon={<Calendar className="w-5 h-5" />}
+          icon={<Calendar className="w-5 h-5 stroke-[2.5]" />}
           iconColor="text-teal-600 dark:text-teal-400"
-          iconBg="bg-teal-50 dark:bg-teal-950/50"
+          iconBg="bg-gradient-to-br from-teal-50 to-teal-100/70 border-teal-200/80 dark:from-teal-950/60 dark:to-teal-900/30 dark:border-teal-800/80"
+          glowColor="from-teal-500/20 dark:from-teal-500/25"
+          sparklineData={[2.4, 2.5, 2.7, 2.6, 2.8, 2.9]}
         />
         <StatCard
           title="Active Doctors"
@@ -81,9 +85,11 @@ export function HealthcareDashboard() {
           change="+6.1%"
           trend="up"
           timeframe="vs last month"
-          icon={<Stethoscope className="w-5 h-5" />}
+          icon={<Stethoscope className="w-5 h-5 stroke-[2.5]" />}
           iconColor="text-emerald-600 dark:text-emerald-400"
-          iconBg="bg-emerald-50 dark:bg-emerald-950/50"
+          iconBg="bg-gradient-to-br from-emerald-50 to-emerald-100/70 border-emerald-200/80 dark:from-emerald-950/60 dark:to-emerald-900/30 dark:border-emerald-800/80"
+          glowColor="from-emerald-500/20 dark:from-emerald-500/25"
+          sparklineData={[170, 175, 178, 180, 184, 186]}
         />
         <StatCard
           title="Treatments Completed"
@@ -91,20 +97,24 @@ export function HealthcareDashboard() {
           change="+14.8%"
           trend="up"
           timeframe="vs last month"
-          icon={<CheckCircle2 className="w-5 h-5" />}
+          icon={<CheckCircle2 className="w-5 h-5 stroke-[2.5]" />}
           iconColor="text-indigo-600 dark:text-indigo-400"
-          iconBg="bg-indigo-50 dark:bg-indigo-950/50"
+          iconBg="bg-gradient-to-br from-indigo-50 to-indigo-100/70 border-indigo-200/80 dark:from-indigo-950/60 dark:to-indigo-900/30 dark:border-indigo-800/80"
+          glowColor="from-indigo-500/20 dark:from-indigo-500/25"
+          sparklineData={[3.6, 3.8, 3.9, 4.0, 4.1, 4.3]}
         />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 p-6">
+        <Card className="lg:col-span-2">
           <CardHeader>
             <div>
               <CardTitle>Patient Visits</CardTitle>
-              <span className="text-xs text-emerald-600 font-semibold">+18.4% growth</span>
+              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200/60 dark:border-emerald-800/60">
+                +18.4% growth
+              </span>
             </div>
-            <span className="text-xs text-slate-400">Monthly ▾</span>
+            <span className="text-xs text-slate-400 font-semibold">Monthly ▾</span>
           </CardHeader>
           <AreaSplineChart
             data={patientVisits}
@@ -116,10 +126,12 @@ export function HealthcareDashboard() {
           />
         </Card>
 
-        <Card className="p-6 flex flex-col justify-between">
+        <Card className="flex flex-col justify-between">
           <CardHeader className="mb-2">
             <CardTitle>Bed Occupancy</CardTitle>
-            <span className="text-xs text-sky-600 font-medium cursor-pointer">View Details →</span>
+            <span className="text-xs text-sky-600 dark:text-sky-400 font-bold hover:underline cursor-pointer">
+              View Details →
+            </span>
           </CardHeader>
           <CircularGauge
             percentage={78}
@@ -135,28 +147,30 @@ export function HealthcareDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 p-6">
+        <Card className="lg:col-span-2">
           <CardHeader className="mb-3">
             <CardTitle>Department Performance</CardTitle>
-            <span className="text-xs text-sky-600 font-medium cursor-pointer">View all</span>
+            <span className="text-xs text-sky-600 dark:text-sky-400 hover:underline cursor-pointer font-bold">
+              View all
+            </span>
           </CardHeader>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400">
+                <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
                   <th className="pb-3">Department</th>
                   <th className="pb-3">Patients</th>
                   <th className="pb-3">Avg. Wait Time</th>
                   <th className="pb-3 text-right">Satisfaction</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
+              <tbody className="divide-y divide-slate-100/80 dark:divide-slate-800/80">
                 {departmentPerformance.map((dept, i) => (
-                  <tr key={i} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40">
-                    <td className="py-2.5 font-semibold text-slate-800 dark:text-slate-100">{dept.dept}</td>
-                    <td className="py-2.5 text-slate-600 dark:text-slate-400">{dept.patients}</td>
-                    <td className="py-2.5 text-slate-600 dark:text-slate-400">{dept.waitTime}</td>
-                    <td className="py-2.5 text-right font-bold text-emerald-600">{dept.satisfaction}</td>
+                  <tr key={i} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="py-2.5 font-bold text-slate-800 dark:text-slate-100">{dept.dept}</td>
+                    <td className="py-2.5 text-slate-600 dark:text-slate-400 font-medium">{dept.patients}</td>
+                    <td className="py-2.5 text-slate-600 dark:text-slate-400 font-medium">{dept.waitTime}</td>
+                    <td className="py-2.5 text-right font-extrabold text-emerald-600 dark:text-emerald-400">{dept.satisfaction}</td>
                   </tr>
                 ))}
               </tbody>
@@ -164,7 +178,7 @@ export function HealthcareDashboard() {
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card>
           <DonutChart
             data={treatmentSegments}
             centerValue="94%"
@@ -176,23 +190,25 @@ export function HealthcareDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-6">
+        <Card>
           <CardHeader className="mb-3">
             <CardTitle>Recent Admissions</CardTitle>
-            <span className="text-xs text-sky-600 font-medium cursor-pointer">View all</span>
+            <span className="text-xs text-sky-600 dark:text-sky-400 hover:underline cursor-pointer font-bold">
+              View all
+            </span>
           </CardHeader>
           <div className="space-y-3">
             {recentAdmissions.map((patient, i) => (
-              <div key={i} className="flex items-center justify-between text-xs py-1.5 border-b border-slate-50 dark:border-slate-800 last:border-0">
+              <div key={i} className="flex items-center justify-between text-xs py-2 border-b border-slate-100/80 dark:border-slate-800/80 last:border-0">
                 <div className="flex items-center gap-2.5">
                   <Avatar src={patient.avatar} name={patient.name} size="xs" />
                   <div>
-                    <h5 className="font-semibold text-slate-800 dark:text-slate-100">{patient.name}</h5>
+                    <h5 className="font-bold text-slate-800 dark:text-slate-100">{patient.name}</h5>
                     <p className="text-[10px] text-slate-400">{patient.age} yrs • {patient.dept}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <Badge variant={patient.status === 'Stable' ? 'success' : patient.status === 'Recovering' ? 'info' : 'warning'} size="sm">
+                  <Badge variant={patient.status === 'Stable' ? 'success' : patient.status === 'Recovering' ? 'info' : 'warning'} size="sm" dot>
                     {patient.status}
                   </Badge>
                   <p className="text-[10px] text-slate-400 mt-0.5">{patient.date}</p>
@@ -202,20 +218,22 @@ export function HealthcareDashboard() {
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card>
           <CardHeader className="mb-3">
             <CardTitle>Today's Doctor Schedule</CardTitle>
-            <span className="text-xs text-sky-600 font-medium cursor-pointer">View all</span>
+            <span className="text-xs text-sky-600 dark:text-sky-400 hover:underline cursor-pointer font-bold">
+              Full Roster →
+            </span>
           </CardHeader>
           <div className="space-y-3">
             {doctorSchedule.map((doc, i) => (
-              <div key={i} className="flex items-center justify-between text-xs py-2 border-b border-slate-50 dark:border-slate-800 last:border-0">
+              <div key={i} className="flex items-center justify-between text-xs py-2 border-b border-slate-100/80 dark:border-slate-800/80 last:border-0">
                 <div className="flex items-center gap-3">
-                  <div className="w-14 text-[10px] font-bold text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/50 py-1 px-1.5 rounded-md text-center">
+                  <div className="w-16 text-[10px] font-extrabold text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/60 py-1.5 px-2 rounded-lg text-center border border-sky-200/60 dark:border-sky-800/60 shadow-2xs">
                     {doc.time}
                   </div>
                   <div>
-                    <h5 className="font-semibold text-slate-800 dark:text-slate-100">{doc.doctor}</h5>
+                    <h5 className="font-bold text-slate-800 dark:text-slate-100">{doc.doctor}</h5>
                     <p className="text-[10px] text-slate-400">{doc.dept}</p>
                   </div>
                 </div>

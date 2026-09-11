@@ -57,7 +57,6 @@ export function HRDashboard() {
         description="Build amazing teams, track hiring pipeline, and create better workplaces."
       />
 
-      {/* 4 Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <StatCard
           title="Total Employees"
@@ -65,9 +64,11 @@ export function HRDashboard() {
           change="+6.4%"
           trend="up"
           timeframe="vs last month"
-          icon={<Users className="w-5 h-5" />}
-          iconColor="text-emerald-600"
-          iconBg="bg-emerald-50"
+          icon={<Users className="w-5 h-5 stroke-[2.5]" />}
+          iconColor="text-emerald-600 dark:text-emerald-400"
+          iconBg="bg-gradient-to-br from-emerald-50 to-emerald-100/70 border-emerald-200/80 dark:from-emerald-950/60 dark:to-emerald-900/30 dark:border-emerald-800/80"
+          glowColor="from-emerald-500/20 dark:from-emerald-500/25"
+          sparklineData={[220, 228, 234, 240, 248]}
         />
         <StatCard
           title="Open Roles"
@@ -75,9 +76,11 @@ export function HRDashboard() {
           change="+28.6%"
           trend="up"
           timeframe="vs last month"
-          icon={<Briefcase className="w-5 h-5" />}
-          iconColor="text-blue-600"
-          iconBg="bg-blue-50"
+          icon={<Briefcase className="w-5 h-5 stroke-[2.5]" />}
+          iconColor="text-blue-600 dark:text-blue-400"
+          iconBg="bg-gradient-to-br from-blue-50 to-blue-100/70 border-blue-200/80 dark:from-blue-950/60 dark:to-blue-900/30 dark:border-blue-800/80"
+          glowColor="from-blue-500/20 dark:from-blue-500/25"
+          sparklineData={[12, 14, 15, 16, 18]}
         />
         <StatCard
           title="New Hires"
@@ -85,9 +88,11 @@ export function HRDashboard() {
           change="+33.3%"
           trend="up"
           timeframe="vs last month"
-          icon={<UserPlus className="w-5 h-5" />}
-          iconColor="text-teal-600"
-          iconBg="bg-teal-50"
+          icon={<UserPlus className="w-5 h-5 stroke-[2.5]" />}
+          iconColor="text-teal-600 dark:text-teal-400"
+          iconBg="bg-gradient-to-br from-teal-50 to-teal-100/70 border-teal-200/80 dark:from-teal-950/60 dark:to-teal-900/30 dark:border-teal-800/80"
+          glowColor="from-teal-500/20 dark:from-teal-500/25"
+          sparklineData={[6, 8, 9, 10, 12]}
         />
         <StatCard
           title="Engagement Score"
@@ -95,22 +100,23 @@ export function HRDashboard() {
           change="+4.9%"
           trend="up"
           timeframe="vs last quarter"
-          icon={<Zap className="w-5 h-5" />}
-          iconColor="text-emerald-600"
-          iconBg="bg-emerald-50"
+          icon={<Zap className="w-5 h-5 stroke-[2.5]" />}
+          iconColor="text-purple-600 dark:text-purple-400"
+          iconBg="bg-gradient-to-br from-purple-50 to-purple-100/70 border-purple-200/80 dark:from-purple-950/60 dark:to-purple-900/30 dark:border-purple-800/80"
+          glowColor="from-purple-500/20 dark:from-purple-500/25"
+          sparklineData={[8.0, 8.2, 8.3, 8.5, 8.6]}
         />
       </div>
 
-      {/* Row 2: Hiring Funnel, Attendance Gauge, Department Donut */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="p-6">
+        <Card>
           <FunnelChart stages={hiringFunnel} title="Hiring Funnel" />
         </Card>
 
-        <Card className="p-6 flex flex-col justify-between">
+        <Card className="flex flex-col justify-between">
           <CardHeader className="mb-2">
             <CardTitle>Attendance Summary</CardTitle>
-            <span className="text-xs text-slate-400 font-medium">This Month</span>
+            <span className="text-xs text-slate-400 font-semibold">This Month</span>
           </CardHeader>
           <CircularGauge
             percentage={92}
@@ -124,7 +130,7 @@ export function HRDashboard() {
           />
         </Card>
 
-        <Card className="p-6">
+        <Card>
           <DonutChart
             data={departmentSegments}
             centerValue="248"
@@ -135,38 +141,37 @@ export function HRDashboard() {
         </Card>
       </div>
 
-      {/* Row 3: Upcoming Interviews, Onboarding Tracker & Workforce Analytics */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="p-6">
+        <Card>
           <CardHeader className="mb-3">
             <CardTitle>Upcoming Interviews</CardTitle>
-            <span className="text-xs text-indigo-600 font-medium cursor-pointer">View all</span>
+            <span className="text-xs text-indigo-600 dark:text-indigo-400 font-bold hover:underline cursor-pointer">View all</span>
           </CardHeader>
           <div className="space-y-3">
             {upcomingInterviews.map((item, idx) => (
-              <div key={idx} className="flex items-center justify-between text-xs py-1.5 border-b border-slate-50 last:border-0">
+              <div key={idx} className="flex items-center justify-between text-xs py-2 border-b border-slate-100/80 dark:border-slate-800/80 last:border-0 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 rounded-xl px-2 transition-colors">
                 <div className="flex items-center gap-2.5">
                   <Avatar src={item.avatar} name={item.name} size="xs" />
                   <div>
-                    <p className="font-semibold text-slate-800">{item.name}</p>
-                    <p className="text-[10px] text-slate-400">{item.role}</p>
+                    <p className="font-bold text-slate-900 dark:text-white">{item.name}</p>
+                    <p className="text-[10px] text-slate-400 font-medium">{item.role}</p>
                   </div>
                 </div>
                 <div className="text-right">
                   <Badge variant={item.status === 'Interview' ? 'info' : 'primary'} size="sm">
                     {item.status}
                   </Badge>
-                  <p className="text-[10px] text-slate-400 mt-1">{item.date.split('•')[0]}</p>
+                  <p className="text-[10px] text-slate-400 font-medium mt-1">{item.date.split('•')[0]}</p>
                 </div>
               </div>
             ))}
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card>
           <CardHeader className="mb-3">
             <CardTitle>Onboarding Tracker</CardTitle>
-            <span className="text-xs text-indigo-600 font-medium cursor-pointer">View all</span>
+            <span className="text-xs text-indigo-600 dark:text-indigo-400 font-bold hover:underline cursor-pointer">Cohort view →</span>
           </CardHeader>
           <div className="space-y-3.5">
             {onboardingTracker.map((person, idx) => (
@@ -175,13 +180,13 @@ export function HRDashboard() {
                   <div className="flex items-center gap-2">
                     <Avatar src={person.avatar} name={person.name} size="xs" />
                     <div>
-                      <p className="font-medium text-slate-800">{person.name}</p>
-                      <p className="text-[10px] text-slate-400">{person.role}</p>
+                      <p className="font-bold text-slate-800 dark:text-slate-100">{person.name}</p>
+                      <p className="text-[10px] text-slate-400 font-medium">{person.role}</p>
                     </div>
                   </div>
-                  <span className="font-bold text-slate-700">{person.progress}%</span>
+                  <span className="font-extrabold text-slate-900 dark:text-white">{person.progress}%</span>
                 </div>
-                <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
                   <div
                     className="h-full rounded-full bg-emerald-500 transition-all duration-500"
                     style={{ width: `${person.progress}%` }}
@@ -192,13 +197,13 @@ export function HRDashboard() {
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card>
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-sm font-semibold text-slate-900">Workforce Analytics</h3>
-              <p className="text-xs font-semibold text-emerald-600 mt-0.5">+18% Employee Growth</p>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Workforce Analytics</h3>
+              <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">+18% Employee Growth</p>
             </div>
-            <span className="text-xs text-slate-400">Last 6 Months</span>
+            <span className="text-xs text-slate-400 font-semibold">Last 6 Months</span>
           </div>
           <AreaSplineChart
             data={workforceTrend}

@@ -61,9 +61,11 @@ export function CRMDashboard() {
           change="+18.3%"
           trend="up"
           timeframe="vs last month"
-          icon={<Target className="w-5 h-5" />}
+          icon={<Target className="w-5 h-5 stroke-[2.5]" />}
           iconColor="text-emerald-600 dark:text-emerald-400"
-          iconBg="bg-emerald-50 dark:bg-emerald-950/50"
+          iconBg="bg-gradient-to-br from-emerald-50 to-emerald-100/70 border-emerald-200/80 dark:from-emerald-950/60 dark:to-emerald-900/30 dark:border-emerald-800/80"
+          glowColor="from-emerald-500/20 dark:from-emerald-500/25"
+          sparklineData={[3200, 3500, 3800, 4100, 4320]}
         />
         <StatCard
           title="Total Contacts"
@@ -71,9 +73,11 @@ export function CRMDashboard() {
           change="+12.6%"
           trend="up"
           timeframe="vs last month"
-          icon={<Users className="w-5 h-5" />}
+          icon={<Users className="w-5 h-5 stroke-[2.5]" />}
           iconColor="text-blue-600 dark:text-blue-400"
-          iconBg="bg-blue-50 dark:bg-blue-950/50"
+          iconBg="bg-gradient-to-br from-blue-50 to-blue-100/70 border-blue-200/80 dark:from-blue-950/60 dark:to-blue-900/30 dark:border-blue-800/80"
+          glowColor="from-blue-500/20 dark:from-blue-500/25"
+          sparklineData={[2400, 2550, 2680, 2750, 2856]}
         />
         <StatCard
           title="Total Customers"
@@ -81,9 +85,11 @@ export function CRMDashboard() {
           change="+20.1%"
           trend="up"
           timeframe="vs last month"
-          icon={<UserCheck className="w-5 h-5" />}
+          icon={<UserCheck className="w-5 h-5 stroke-[2.5]" />}
           iconColor="text-purple-600 dark:text-purple-400"
-          iconBg="bg-purple-50 dark:bg-purple-950/50"
+          iconBg="bg-gradient-to-br from-purple-50 to-purple-100/70 border-purple-200/80 dark:from-purple-950/60 dark:to-purple-900/30 dark:border-purple-800/80"
+          glowColor="from-purple-500/20 dark:from-purple-500/25"
+          sparklineData={[800, 850, 920, 970, 1024]}
         />
         <StatCard
           title="Total Revenue"
@@ -91,29 +97,31 @@ export function CRMDashboard() {
           change="+27.4%"
           trend="up"
           timeframe="vs last month"
-          icon={<DollarSign className="w-5 h-5" />}
+          icon={<DollarSign className="w-5 h-5 stroke-[2.5]" />}
           iconColor="text-emerald-600 dark:text-emerald-400"
-          iconBg="bg-emerald-50 dark:bg-emerald-950/50"
+          iconBg="bg-gradient-to-br from-emerald-50 to-emerald-100/70 border-emerald-200/80 dark:from-emerald-950/60 dark:to-emerald-900/30 dark:border-emerald-800/80"
+          glowColor="from-emerald-500/20 dark:from-emerald-500/25"
+          sparklineData={[65, 72, 80, 89, 98.4]}
         />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 p-6">
+        <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Sales Pipeline</CardTitle>
-            <span className="text-xs text-slate-400 font-medium">This Month ▾</span>
+            <span className="text-xs text-slate-400 font-semibold">This Month ▾</span>
           </CardHeader>
           <div className="space-y-3 mt-4">
             {pipelineStages.map((stage, i) => (
               <div key={i} className="flex items-center gap-3">
-                <span className="w-24 text-xs font-medium text-slate-600 dark:text-slate-400">{stage.label}</span>
-                <div className="flex-1 bg-slate-100 dark:bg-slate-800 h-6 rounded-xl overflow-hidden relative">
+                <span className="w-24 text-xs font-semibold text-slate-700 dark:text-slate-300">{stage.label}</span>
+                <div className="flex-1 bg-slate-100 dark:bg-slate-800 h-7 rounded-xl overflow-hidden relative border border-slate-200/50 dark:border-slate-700/50">
                   <div
-                    className="h-full rounded-xl transition-all duration-500"
+                    className="h-full rounded-xl transition-all duration-500 flex items-center justify-end pr-2 text-white font-bold text-[10px]"
                     style={{ width: stage.width, backgroundColor: stage.color }}
                   />
                 </div>
-                <span className="w-14 text-right text-xs font-bold text-slate-800 dark:text-slate-100">
+                <span className="w-14 text-right text-xs font-extrabold text-slate-900 dark:text-white">
                   {stage.count.toLocaleString()}
                 </span>
               </div>
@@ -121,7 +129,7 @@ export function CRMDashboard() {
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card>
           <DonutChart
             data={dealSegments}
             centerValue="540"
@@ -132,10 +140,10 @@ export function CRMDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="p-6">
+        <Card>
           <CardHeader>
             <CardTitle>Customer Acquisition</CardTitle>
-            <span className="text-xs text-slate-400 font-medium">This Month ▾</span>
+            <span className="text-xs text-slate-400 font-semibold">This Month ▾</span>
           </CardHeader>
           <AreaSplineChart
             data={customerAcquisition}
@@ -147,42 +155,42 @@ export function CRMDashboard() {
           />
         </Card>
 
-        <Card className="p-6">
+        <Card>
           <CardHeader className="mb-3">
             <CardTitle>Upcoming Tasks & Calendar</CardTitle>
-            <span className="text-xs text-indigo-600 font-medium cursor-pointer">View all</span>
+            <span className="text-xs text-indigo-600 dark:text-indigo-400 font-bold hover:underline cursor-pointer">View all</span>
           </CardHeader>
           <div className="space-y-3">
             {upcomingTasks.map((task, idx) => (
-              <div key={idx} className="flex items-start gap-3 text-xs py-1 border-b border-slate-50 dark:border-slate-800 last:border-0">
-                <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex flex-col items-center justify-center shrink-0">
-                  <span className="text-xs font-bold text-slate-800 dark:text-slate-100 leading-none">{task.date.split(' ')[0]}</span>
-                  <span className="text-[9px] text-slate-400 uppercase">{task.date.split(' ')[1]}</span>
+              <div key={idx} className="flex items-start gap-3 text-xs py-2 border-b border-slate-100/80 dark:border-slate-800/80 last:border-0 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 rounded-xl px-2 transition-colors">
+                <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex flex-col items-center justify-center shrink-0 border border-slate-200/60 dark:border-slate-700/60 shadow-2xs">
+                  <span className="text-xs font-extrabold text-slate-900 dark:text-white leading-none">{task.date.split(' ')[0]}</span>
+                  <span className="text-[9px] text-slate-400 font-bold uppercase">{task.date.split(' ')[1]}</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-slate-800 dark:text-slate-100 truncate">{task.title}</p>
-                  <p className="text-[10px] text-slate-400">{task.company}</p>
+                  <p className="font-bold text-slate-800 dark:text-slate-100 truncate">{task.title}</p>
+                  <p className="text-[10px] text-slate-400 font-medium">{task.company}</p>
                 </div>
-                <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 shrink-0">{task.time}</span>
+                <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 shrink-0">{task.time}</span>
               </div>
             ))}
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card>
           <CardHeader className="mb-3">
             <CardTitle>Recent Messages</CardTitle>
-            <span className="text-xs text-indigo-600 font-medium cursor-pointer">View all</span>
+            <span className="text-xs text-indigo-600 dark:text-indigo-400 font-bold hover:underline cursor-pointer">Inbox →</span>
           </CardHeader>
           <div className="space-y-3">
             {recentMessages.map((msg, idx) => (
-              <div key={idx} className="flex items-center gap-3 text-xs py-1.5 border-b border-slate-50 dark:border-slate-800 last:border-0">
+              <div key={idx} className="flex items-center gap-3 text-xs py-2 border-b border-slate-100/80 dark:border-slate-800/80 last:border-0 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 rounded-xl px-2 transition-colors">
                 <Avatar name={msg.sender} size="xs" status={msg.online ? 'online' : 'offline'} />
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-slate-800 dark:text-slate-100 truncate">{msg.sender}</p>
+                  <p className="font-bold text-slate-900 dark:text-white truncate">{msg.sender}</p>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">{msg.text}</p>
                 </div>
-                <span className="text-[10px] text-slate-400 shrink-0">{msg.time}</span>
+                <span className="text-[10px] text-slate-400 font-medium shrink-0">{msg.time}</span>
               </div>
             ))}
           </div>

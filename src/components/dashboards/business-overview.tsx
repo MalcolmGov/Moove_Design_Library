@@ -89,7 +89,7 @@ export function BusinessOverviewDashboard() {
         description="Track your sales, users and growth in real-time."
       />
 
-      {/* Row 1: 4 Metric Cards */}
+      {/* Row 1: 4 Polished Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <StatCard
           title="Total Revenue"
@@ -97,9 +97,11 @@ export function BusinessOverviewDashboard() {
           change="+12.5%"
           trend="up"
           timeframe="vs last month"
-          icon={<DollarSign className="w-5 h-5" />}
-          iconColor="text-emerald-600"
-          iconBg="bg-emerald-50"
+          icon={<DollarSign className="w-5 h-5 stroke-[2.5]" />}
+          iconColor="text-emerald-600 dark:text-emerald-400"
+          iconBg="bg-gradient-to-br from-emerald-50 to-emerald-100/70 border-emerald-200/80 dark:from-emerald-950/60 dark:to-emerald-900/30 dark:border-emerald-800/80"
+          glowColor="from-emerald-500/20 dark:from-emerald-500/25"
+          sparklineData={[16, 21, 19, 24, 22, 28]}
         />
         <StatCard
           title="Total Customers"
@@ -107,9 +109,11 @@ export function BusinessOverviewDashboard() {
           change="+8.2%"
           trend="up"
           timeframe="vs last month"
-          icon={<Users className="w-5 h-5" />}
-          iconColor="text-blue-600"
-          iconBg="bg-blue-50"
+          icon={<Users className="w-5 h-5 stroke-[2.5]" />}
+          iconColor="text-blue-600 dark:text-blue-400"
+          iconBg="bg-gradient-to-br from-blue-50 to-blue-100/70 border-blue-200/80 dark:from-blue-950/60 dark:to-blue-900/30 dark:border-blue-800/80"
+          glowColor="from-blue-500/20 dark:from-blue-500/25"
+          sparklineData={[8, 10, 9, 11, 11.5, 12.4]}
         />
         <StatCard
           title="Total Orders"
@@ -117,9 +121,11 @@ export function BusinessOverviewDashboard() {
           change="+14.6%"
           trend="up"
           timeframe="vs last month"
-          icon={<ShoppingBag className="w-5 h-5" />}
-          iconColor="text-amber-600"
-          iconBg="bg-amber-50"
+          icon={<ShoppingBag className="w-5 h-5 stroke-[2.5]" />}
+          iconColor="text-amber-600 dark:text-amber-400"
+          iconBg="bg-gradient-to-br from-amber-50 to-amber-100/70 border-amber-200/80 dark:from-amber-950/60 dark:to-amber-900/30 dark:border-amber-800/80"
+          glowColor="from-amber-500/20 dark:from-amber-500/25"
+          sparklineData={[18, 20, 22, 25, 27, 29]}
         />
         <StatCard
           title="Conversion Rate"
@@ -127,30 +133,32 @@ export function BusinessOverviewDashboard() {
           change="+0.9%"
           trend="up"
           timeframe="vs last month"
-          icon={<BarChart3 className="w-5 h-5" />}
-          iconColor="text-indigo-600"
-          iconBg="bg-indigo-50"
+          icon={<BarChart3 className="w-5 h-5 stroke-[2.5]" />}
+          iconColor="text-purple-600 dark:text-purple-400"
+          iconBg="bg-gradient-to-br from-purple-50 to-purple-100/70 border-purple-200/80 dark:from-purple-950/60 dark:to-purple-900/30 dark:border-purple-800/80"
+          glowColor="from-purple-500/20 dark:from-purple-500/25"
+          sparklineData={[3.8, 4.0, 4.2, 4.1, 4.5, 4.8]}
         />
       </div>
 
       {/* Row 2: Revenue Chart & Category Donut */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 p-6">
+        <Card className="lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-semibold text-slate-900">Revenue Overview</h3>
-                <span className="inline-flex items-center gap-0.5 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                  <ArrowUpRight className="w-3 h-3" /> +28.4%
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">Revenue Overview</h3>
+                <span className="inline-flex items-center gap-0.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200/60 dark:border-emerald-800/60 shadow-2xs">
+                  <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" /> +28.4%
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">Monthly revenue trends across all channels</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Monthly revenue trends across all channels</p>
             </div>
           </div>
           <AreaSplineChart data={splineData} color="#3b82f6" gradientId="bizSpline" />
         </Card>
 
-        <Card className="p-6">
+        <Card>
           <DonutChart
             data={categorySegments}
             centerValue="$78,945"
@@ -162,36 +170,36 @@ export function BusinessOverviewDashboard() {
 
       {/* Row 3: Recent Orders Table & Top Markets */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 p-6">
+        <Card className="lg:col-span-2">
           <CardHeader className="mb-3">
             <CardTitle>Recent Orders</CardTitle>
-            <span className="text-xs text-indigo-600 hover:text-indigo-700 cursor-pointer font-medium">
-              View all
+            <span className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer font-bold">
+              View all orders →
             </span>
           </CardHeader>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-slate-100 text-slate-400 font-medium">
-                  <th className="pb-3 font-semibold">Order ID</th>
-                  <th className="pb-3 font-semibold">Customer</th>
-                  <th className="pb-3 font-semibold">Product</th>
-                  <th className="pb-3 font-semibold">Amount</th>
-                  <th className="pb-3 font-semibold text-right">Status</th>
+                <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
+                  <th className="pb-3">Order ID</th>
+                  <th className="pb-3">Customer</th>
+                  <th className="pb-3">Product</th>
+                  <th className="pb-3">Amount</th>
+                  <th className="pb-3 text-right">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-slate-100/80 dark:divide-slate-800/80">
                 {recentOrders.map((order) => (
-                  <tr key={order.id} className="hover:bg-slate-50/70 transition-colors">
-                    <td className="py-3 font-medium text-slate-600">{order.id}</td>
+                  <tr key={order.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="py-3 font-semibold text-slate-700 dark:text-slate-300">{order.id}</td>
                     <td className="py-3">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2.5">
                         <Avatar src={order.avatar} name={order.customer} size="xs" />
-                        <span className="font-semibold text-slate-800">{order.customer}</span>
+                        <span className="font-bold text-slate-900 dark:text-white">{order.customer}</span>
                       </div>
                     </td>
-                    <td className="py-3 text-slate-600">{order.product}</td>
-                    <td className="py-3 font-bold text-slate-800">{order.amount}</td>
+                    <td className="py-3 text-slate-600 dark:text-slate-400 font-medium">{order.product}</td>
+                    <td className="py-3 font-extrabold text-slate-900 dark:text-white">{order.amount}</td>
                     <td className="py-3 text-right">
                       <Badge
                         variant={
@@ -215,26 +223,26 @@ export function BusinessOverviewDashboard() {
         </Card>
 
         {/* Top Markets */}
-        <Card className="p-6">
+        <Card>
           <CardHeader className="mb-3">
             <CardTitle>Top Markets</CardTitle>
-            <span className="text-xs text-indigo-600 hover:text-indigo-700 cursor-pointer font-medium">
+            <span className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer font-bold">
               Details
             </span>
           </CardHeader>
           <div className="space-y-3.5">
             {topMarkets.map((market, idx) => (
-              <div key={idx} className="flex items-center justify-between text-xs py-1 border-b border-slate-50 last:border-0">
+              <div key={idx} className="flex items-center justify-between text-xs py-1.5 border-b border-slate-100/80 dark:border-slate-800/80 last:border-0">
                 <div className="flex items-center gap-2.5">
-                  <span className="w-6 h-6 rounded-md bg-slate-100 text-slate-700 font-bold text-[10px] flex items-center justify-center">
+                  <span className="w-7 h-7 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-extrabold text-[10px] flex items-center justify-center border border-slate-200/60 dark:border-slate-700/60 shadow-2xs">
                     {market.code}
                   </span>
                   <div>
-                    <p className="font-medium text-slate-800">{market.country}</p>
-                    <p className="text-[10px] text-emerald-600 font-semibold">{market.growth}</p>
+                    <p className="font-bold text-slate-800 dark:text-slate-200">{market.country}</p>
+                    <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">{market.growth}</p>
                   </div>
                 </div>
-                <span className="font-bold text-slate-900">{market.revenue}</span>
+                <span className="font-extrabold text-slate-900 dark:text-white">{market.revenue}</span>
               </div>
             ))}
           </div>

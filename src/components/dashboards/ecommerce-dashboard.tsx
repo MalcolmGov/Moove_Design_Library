@@ -54,9 +54,11 @@ export function EcommerceDashboard() {
           change="+18.4%"
           trend="up"
           timeframe="vs last month"
-          icon={<DollarSign className="w-5 h-5" />}
+          icon={<DollarSign className="w-5 h-5 stroke-[2.5]" />}
           iconColor="text-emerald-600 dark:text-emerald-400"
-          iconBg="bg-emerald-50 dark:bg-emerald-950/50"
+          iconBg="bg-gradient-to-br from-emerald-50 to-emerald-100/70 border-emerald-200/80 dark:from-emerald-950/60 dark:to-emerald-900/30 dark:border-emerald-800/80"
+          glowColor="from-emerald-500/20 dark:from-emerald-500/25"
+          sparklineData={[32, 36, 40, 44, 48.9]}
         />
         <StatCard
           title="Total Orders"
@@ -64,9 +66,11 @@ export function EcommerceDashboard() {
           change="+12.8%"
           trend="up"
           timeframe="vs last month"
-          icon={<ShoppingBag className="w-5 h-5" />}
+          icon={<ShoppingBag className="w-5 h-5 stroke-[2.5]" />}
           iconColor="text-blue-600 dark:text-blue-400"
-          iconBg="bg-blue-50 dark:bg-blue-950/50"
+          iconBg="bg-gradient-to-br from-blue-50 to-blue-100/70 border-blue-200/80 dark:from-blue-950/60 dark:to-blue-900/30 dark:border-blue-800/80"
+          glowColor="from-blue-500/20 dark:from-blue-500/25"
+          sparklineData={[980, 1040, 1120, 1190, 1245]}
         />
         <StatCard
           title="Customers"
@@ -74,9 +78,11 @@ export function EcommerceDashboard() {
           change="+16.9%"
           trend="up"
           timeframe="vs last month"
-          icon={<Users className="w-5 h-5" />}
+          icon={<Users className="w-5 h-5 stroke-[2.5]" />}
           iconColor="text-purple-600 dark:text-purple-400"
-          iconBg="bg-purple-50 dark:bg-purple-950/50"
+          iconBg="bg-gradient-to-br from-purple-50 to-purple-100/70 border-purple-200/80 dark:from-purple-950/60 dark:to-purple-900/30 dark:border-purple-800/80"
+          glowColor="from-purple-500/20 dark:from-purple-500/25"
+          sparklineData={[700, 740, 800, 850, 892]}
         />
         <StatCard
           title="Conversion Rate"
@@ -84,20 +90,22 @@ export function EcommerceDashboard() {
           change="+0.7%"
           trend="up"
           timeframe="vs last month"
-          icon={<TrendingUp className="w-5 h-5" />}
+          icon={<TrendingUp className="w-5 h-5 stroke-[2.5]" />}
           iconColor="text-indigo-600 dark:text-indigo-400"
-          iconBg="bg-indigo-50 dark:bg-indigo-950/50"
+          iconBg="bg-gradient-to-br from-indigo-50 to-indigo-100/70 border-indigo-200/80 dark:from-indigo-950/60 dark:to-indigo-900/30 dark:border-indigo-800/80"
+          glowColor="from-indigo-500/20 dark:from-indigo-500/25"
+          sparklineData={[2.9, 3.1, 3.2, 3.4, 3.6]}
         />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 p-6">
+        <Card className="lg:col-span-2">
           <CardHeader>
             <div>
               <CardTitle>Sales Trend</CardTitle>
-              <p className="text-xs text-emerald-600 font-semibold mt-0.5">+18.4% compared to May</p>
+              <p className="text-xs text-emerald-600 dark:text-emerald-400 font-bold mt-0.5">+18.4% compared to May</p>
             </div>
-            <span className="text-xs text-slate-400">Monthly ▾</span>
+            <span className="text-xs text-slate-400 font-semibold">Monthly ▾</span>
           </CardHeader>
           <AreaSplineChart
             data={salesTrend}
@@ -107,7 +115,7 @@ export function EcommerceDashboard() {
           />
         </Card>
 
-        <Card className="p-6">
+        <Card>
           <DonutChart
             data={trafficSources}
             centerValue="1,245"
@@ -118,55 +126,55 @@ export function EcommerceDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-6">
+        <Card>
           <CardHeader className="mb-3">
             <CardTitle>Top Products</CardTitle>
-            <span className="text-xs text-indigo-600 font-medium cursor-pointer">View all</span>
+            <span className="text-xs text-indigo-600 dark:text-indigo-400 font-bold hover:underline cursor-pointer">Catalog →</span>
           </CardHeader>
           <div className="space-y-3">
             {topProducts.map((prod, idx) => (
-              <div key={idx} className="flex items-center justify-between text-xs py-1.5 border-b border-slate-50 dark:border-slate-800 last:border-0">
+              <div key={idx} className="flex items-center justify-between text-xs py-2 border-b border-slate-100/80 dark:border-slate-800/80 last:border-0 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 rounded-xl px-2 transition-colors">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 font-bold text-xs">
+                  <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-800 dark:text-slate-100 font-extrabold text-xs border border-slate-200/60 dark:border-slate-700/60 shadow-2xs">
                     {idx + 1}
                   </div>
                   <div>
-                    <h5 className="font-semibold text-slate-800 dark:text-slate-100">{prod.name}</h5>
-                    <p className="text-[10px] text-slate-400">{prod.category} • {prod.units}</p>
+                    <h5 className="font-bold text-slate-800 dark:text-slate-100">{prod.name}</h5>
+                    <p className="text-[10px] text-slate-400 font-medium">{prod.category} • {prod.units}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="font-bold text-slate-900 dark:text-white block">{prod.revenue}</span>
-                  <span className="text-[10px] text-emerald-600 font-semibold">{prod.growth}</span>
+                  <span className="font-extrabold text-slate-900 dark:text-white block">{prod.revenue}</span>
+                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">{prod.growth}</span>
                 </div>
               </div>
             ))}
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card>
           <CardHeader className="mb-3">
             <CardTitle>Recent Orders</CardTitle>
-            <span className="text-xs text-indigo-600 font-medium cursor-pointer">View all</span>
+            <span className="text-xs text-indigo-600 dark:text-indigo-400 font-bold hover:underline cursor-pointer">All orders →</span>
           </CardHeader>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400">
-                  <th className="pb-2.5">Customer</th>
-                  <th className="pb-2.5">Product</th>
-                  <th className="pb-2.5">Amount</th>
-                  <th className="pb-2.5 text-right">Status</th>
+                <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
+                  <th className="pb-3">Customer</th>
+                  <th className="pb-3">Product</th>
+                  <th className="pb-3">Amount</th>
+                  <th className="pb-3 text-right">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
+              <tbody className="divide-y divide-slate-100/80 dark:divide-slate-800/80">
                 {recentOrders.map((ord) => (
-                  <tr key={ord.id}>
-                    <td className="py-2.5 font-semibold text-slate-800 dark:text-slate-100">{ord.customer}</td>
-                    <td className="py-2.5 text-slate-500">{ord.product}</td>
-                    <td className="py-2.5 font-bold text-slate-800 dark:text-slate-100">{ord.amount}</td>
+                  <tr key={ord.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="py-2.5 font-bold text-slate-800 dark:text-slate-100">{ord.customer}</td>
+                    <td className="py-2.5 text-slate-600 dark:text-slate-400 font-medium">{ord.product}</td>
+                    <td className="py-2.5 font-extrabold text-slate-900 dark:text-white">{ord.amount}</td>
                     <td className="py-2.5 text-right">
-                      <Badge variant={ord.status === 'Delivered' ? 'success' : ord.status === 'Shipped' ? 'info' : 'warning'} size="sm">
+                      <Badge variant={ord.status === 'Delivered' ? 'success' : ord.status === 'Shipped' ? 'info' : 'warning'} size="sm" dot>
                         {ord.status}
                       </Badge>
                     </td>

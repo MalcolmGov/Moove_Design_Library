@@ -51,9 +51,11 @@ export function ProjectManagementDashboard() {
           change="+20%"
           trend="up"
           timeframe="vs last month"
-          icon={<FolderKanban className="w-5 h-5" />}
+          icon={<FolderKanban className="w-5 h-5 stroke-[2.5]" />}
           iconColor="text-orange-600 dark:text-orange-400"
-          iconBg="bg-orange-50 dark:bg-orange-950/50"
+          iconBg="bg-gradient-to-br from-orange-50 to-orange-100/70 border-orange-200/80 dark:from-orange-950/60 dark:to-orange-900/30 dark:border-orange-800/80"
+          glowColor="from-orange-500/20 dark:from-orange-500/25"
+          sparklineData={[8, 9, 10, 11, 12]}
         />
         <StatCard
           title="Active Tasks"
@@ -61,9 +63,11 @@ export function ProjectManagementDashboard() {
           change="+12%"
           trend="up"
           timeframe="vs last month"
-          icon={<ListTodo className="w-5 h-5" />}
+          icon={<ListTodo className="w-5 h-5 stroke-[2.5]" />}
           iconColor="text-blue-600 dark:text-blue-400"
-          iconBg="bg-blue-50 dark:bg-blue-950/50"
+          iconBg="bg-gradient-to-br from-blue-50 to-blue-100/70 border-blue-200/80 dark:from-blue-950/60 dark:to-blue-900/30 dark:border-blue-800/80"
+          glowColor="from-blue-500/20 dark:from-blue-500/25"
+          sparklineData={[38, 42, 44, 46, 48]}
         />
         <StatCard
           title="Completed Tasks"
@@ -71,9 +75,11 @@ export function ProjectManagementDashboard() {
           change="+28%"
           trend="up"
           timeframe="vs last month"
-          icon={<CheckCircle2 className="w-5 h-5" />}
+          icon={<CheckCircle2 className="w-5 h-5 stroke-[2.5]" />}
           iconColor="text-emerald-600 dark:text-emerald-400"
-          iconBg="bg-emerald-50 dark:bg-emerald-950/50"
+          iconBg="bg-gradient-to-br from-emerald-50 to-emerald-100/70 border-emerald-200/80 dark:from-emerald-950/60 dark:to-emerald-900/30 dark:border-emerald-800/80"
+          glowColor="from-emerald-500/20 dark:from-emerald-500/25"
+          sparklineData={[24, 28, 30, 33, 36]}
         />
         <StatCard
           title="Upcoming Deadlines"
@@ -81,53 +87,55 @@ export function ProjectManagementDashboard() {
           change="-17%"
           trend="down"
           timeframe="vs last month"
-          icon={<Clock className="w-5 h-5" />}
+          icon={<Clock className="w-5 h-5 stroke-[2.5]" />}
           iconColor="text-rose-600 dark:text-rose-400"
-          iconBg="bg-rose-50 dark:bg-rose-950/50"
+          iconBg="bg-gradient-to-br from-rose-50 to-rose-100/70 border-rose-200/80 dark:from-rose-950/60 dark:to-rose-900/30 dark:border-rose-800/80"
+          glowColor="from-rose-500/20 dark:from-rose-500/25"
+          sparklineData={[8, 7, 6, 6, 5]}
         />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="p-6">
+        <Card>
           <ProgressBarGroup items={projectProgress} title="Project Progress" />
         </Card>
 
-        <Card className="p-6 flex flex-col justify-between">
+        <Card className="flex flex-col justify-between">
           <div>
             <CardHeader className="mb-2">
               <CardTitle>Sprint Overview</CardTitle>
-              <span className="text-xs text-slate-400">Sprint 12 ▾</span>
+              <span className="text-xs text-slate-400 font-semibold">Sprint 12 ▾</span>
             </CardHeader>
             <div className="flex items-center justify-between text-xs text-slate-500 mb-2">
               <span>Jun 10, 2025 - Jun 24, 2025</span>
-              <span className="font-bold text-indigo-600">8 days left</span>
+              <span className="font-extrabold text-indigo-600 dark:text-indigo-400">8 days left</span>
             </div>
-            <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5 overflow-hidden mb-4">
-              <div className="h-full rounded-full bg-indigo-600" style={{ width: '68%' }} />
+            <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-3 overflow-hidden mb-4 border border-slate-200/50 dark:border-slate-700/50">
+              <div className="h-full rounded-full bg-indigo-600 shadow-sm" style={{ width: '68%' }} />
             </div>
           </div>
 
           <div className="grid grid-cols-4 gap-2 pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
-            <div className="bg-slate-50 dark:bg-slate-800/60 p-2 rounded-xl">
-              <span className="text-[10px] text-slate-400 block">To Do</span>
-              <span className="text-sm font-bold text-slate-800 dark:text-slate-100">18</span>
+            <div className="bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60">
+              <span className="text-[10px] text-slate-400 font-bold block uppercase">To Do</span>
+              <span className="text-sm font-extrabold text-slate-800 dark:text-slate-100">18</span>
             </div>
-            <div className="bg-blue-50/70 dark:bg-blue-950/40 p-2 rounded-xl">
-              <span className="text-[10px] text-blue-600 dark:text-blue-400 block">In Progress</span>
-              <span className="text-sm font-bold text-blue-700 dark:text-blue-300">14</span>
+            <div className="bg-blue-50/70 dark:bg-blue-950/40 p-2.5 rounded-xl border border-blue-200/60 dark:border-blue-800/60">
+              <span className="text-[10px] text-blue-600 dark:text-blue-400 font-bold block uppercase">Active</span>
+              <span className="text-sm font-extrabold text-blue-700 dark:text-blue-300">14</span>
             </div>
-            <div className="bg-amber-50/70 dark:bg-amber-950/40 p-2 rounded-xl">
-              <span className="text-[10px] text-amber-600 dark:text-amber-400 block">Review</span>
-              <span className="text-sm font-bold text-amber-700 dark:text-amber-300">8</span>
+            <div className="bg-amber-50/70 dark:bg-amber-950/40 p-2.5 rounded-xl border border-amber-200/60 dark:border-amber-800/60">
+              <span className="text-[10px] text-amber-600 dark:text-amber-400 font-bold block uppercase">Review</span>
+              <span className="text-sm font-extrabold text-amber-700 dark:text-amber-300">8</span>
             </div>
-            <div className="bg-emerald-50/70 dark:bg-emerald-950/40 p-2 rounded-xl">
-              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 block">Done</span>
-              <span className="text-sm font-bold text-emerald-700 dark:text-emerald-300">22</span>
+            <div className="bg-emerald-50/70 dark:bg-emerald-950/40 p-2.5 rounded-xl border border-emerald-200/60 dark:border-emerald-800/60">
+              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold block uppercase">Done</span>
+              <span className="text-sm font-extrabold text-emerald-700 dark:text-emerald-300">22</span>
             </div>
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card>
           <DonutChart
             data={tasksByStatus}
             centerValue="62"
@@ -139,10 +147,10 @@ export function ProjectManagementDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-6">
+        <Card>
           <CardHeader className="mb-3">
             <CardTitle>Team Workload</CardTitle>
-            <span className="text-xs text-indigo-600 font-medium cursor-pointer">View all</span>
+            <span className="text-xs text-indigo-600 dark:text-indigo-400 font-bold hover:underline cursor-pointer">Capacity →</span>
           </CardHeader>
           <div className="space-y-4">
             {teamWorkload.map((member, idx) => (
@@ -151,15 +159,15 @@ export function ProjectManagementDashboard() {
                   <div className="flex items-center gap-2.5">
                     <Avatar src={member.avatar} name={member.name} size="xs" />
                     <div>
-                      <p className="font-semibold text-slate-800 dark:text-slate-100">{member.name}</p>
-                      <p className="text-[10px] text-slate-400">{member.role}</p>
+                      <p className="font-bold text-slate-800 dark:text-slate-100">{member.name}</p>
+                      <p className="text-[10px] text-slate-400 font-medium">{member.role}</p>
                     </div>
                   </div>
-                  <span className="font-bold text-slate-700 dark:text-slate-300">{member.capacity}</span>
+                  <span className="font-extrabold text-slate-900 dark:text-white">{member.capacity}</span>
                 </div>
-                <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden border border-slate-200/40 dark:border-slate-700/40">
                   <div
-                    className="h-full rounded-full transition-all duration-500"
+                    className="h-full rounded-full transition-all duration-500 shadow-xs"
                     style={{ width: member.capacity, backgroundColor: member.color }}
                   />
                 </div>
@@ -168,25 +176,25 @@ export function ProjectManagementDashboard() {
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card>
           <CardHeader className="mb-3">
             <CardTitle>Upcoming Deadlines</CardTitle>
-            <span className="text-xs text-indigo-600 font-medium cursor-pointer">View all</span>
+            <span className="text-xs text-indigo-600 dark:text-indigo-400 font-bold hover:underline cursor-pointer">Calendar view →</span>
           </CardHeader>
           <div className="space-y-3">
             {upcomingDeadlines.map((dl, idx) => (
-              <div key={idx} className="flex items-center justify-between text-xs py-2 border-b border-slate-50 dark:border-slate-800 last:border-0">
+              <div key={idx} className="flex items-center justify-between text-xs py-2 border-b border-slate-100/80 dark:border-slate-800/80 last:border-0 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 rounded-xl px-2 transition-colors">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex flex-col items-center justify-center shrink-0">
-                    <span className="text-[9px] text-slate-400 uppercase leading-none">{dl.date.split(' ')[0]}</span>
-                    <span className="text-xs font-bold text-slate-800 dark:text-slate-100 mt-0.5">{dl.date.split(' ')[1]}</span>
+                  <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex flex-col items-center justify-center shrink-0 border border-slate-200/60 dark:border-slate-700/60 shadow-2xs">
+                    <span className="text-[9px] text-slate-400 font-bold uppercase leading-none">{dl.date.split(' ')[0]}</span>
+                    <span className="text-xs font-extrabold text-slate-900 dark:text-white mt-0.5">{dl.date.split(' ')[1]}</span>
                   </div>
                   <div>
-                    <h5 className="font-semibold text-slate-800 dark:text-slate-100">{dl.title}</h5>
-                    <p className="text-[10px] text-slate-400">{dl.project}</p>
+                    <h5 className="font-bold text-slate-800 dark:text-slate-100">{dl.title}</h5>
+                    <p className="text-[10px] text-slate-400 font-medium">{dl.project}</p>
                   </div>
                 </div>
-                <Badge variant="warning" size="sm">
+                <Badge variant="warning" size="sm" dot>
                   {dl.daysLeft}
                 </Badge>
               </div>

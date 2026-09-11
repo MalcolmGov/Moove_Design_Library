@@ -41,13 +41,13 @@ export function AreaSplineChart({
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const values = data.map((d) => d.value);
-  const maxVal = Math.max(...values, 1) * 1.15;
+  const maxVal = Math.max(...values, 1) * 1.18;
   const minVal = 0;
 
   const width = 600;
   const chartHeight = 180;
-  const paddingX = 30;
-  const paddingY = 20;
+  const paddingX = 25;
+  const paddingY = 22;
 
   const points = data.map((item, index) => {
     const x = paddingX + (index / (data.length - 1)) * (width - paddingX * 2);
@@ -82,20 +82,20 @@ export function AreaSplineChart({
       {(title || filterOptions.length > 0) && (
         <div className="flex items-center justify-between mb-4">
           <div>
-            {title && <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-100 tracking-tight">{title}</h4>}
+            {title && <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">{title}</h4>}
             {subtitle && <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{subtitle}</p>}
           </div>
           {filterOptions.length > 0 && (
-            <div className="flex items-center gap-1 bg-slate-100/80 dark:bg-slate-800 p-1 rounded-xl">
+            <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-800/90 p-1 rounded-xl border border-slate-200/60 dark:border-slate-700/60">
               {filterOptions.map((opt) => (
                 <button
                   key={opt}
                   onClick={() => onFilterChange?.(opt)}
                   className={cn(
-                    'text-xs font-medium px-2.5 py-1 rounded-lg transition-all',
+                    'text-xs font-semibold px-3 py-1 rounded-lg transition-all',
                     activeFilter === opt
-                      ? 'bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 shadow-xs'
-                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'
+                      ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
                   )}
                 >
                   {opt}
@@ -115,13 +115,18 @@ export function AreaSplineChart({
         >
           <defs>
             <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={color} stopOpacity="0.32" />
+              <stop offset="0%" stopColor={color} stopOpacity="0.38" />
+              <stop offset="50%" stopColor={color} stopOpacity="0.12" />
               <stop offset="100%" stopColor={color} stopOpacity="0.0" />
             </linearGradient>
+
+            <filter id={`glow-${gradientId}`} x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor={color} floodOpacity="0.3" />
+            </filter>
           </defs>
 
           {showGrid && (
-            <g className="opacity-40">
+            <g className="opacity-40 dark:opacity-20">
               {[0.25, 0.5, 0.75, 1].map((pct, i) => {
                 const y = chartHeight - paddingY - pct * (chartHeight - paddingY * 2);
                 return (
@@ -131,7 +136,7 @@ export function AreaSplineChart({
                     y1={y}
                     x2={width - paddingX}
                     y2={y}
-                    stroke="#cbd5e1"
+                    stroke="#94a3b8"
                     strokeDasharray="4 4"
                     strokeWidth="1"
                   />
@@ -140,33 +145,37 @@ export function AreaSplineChart({
             </g>
           )}
 
+          {/* Area fill */}
           <path d={areaPath} fill={`url(#${gradientId})`} />
 
+          {/* Main glowing spline curve */}
           <path
             d={linePath}
             fill="none"
             stroke={color}
-            strokeWidth="2.5"
+            strokeWidth="3"
             strokeLinecap="round"
             strokeLinejoin="round"
+            filter={`url(#glow-${gradientId})`}
           />
 
+          {/* Data points */}
           {points.map((pt, idx) => (
             <g key={idx}>
               <circle
                 cx={pt.x}
                 cy={pt.y}
-                r={hoveredIndex === idx ? 6 : 3.5}
+                r={hoveredIndex === idx ? 6.5 : 3.5}
                 fill="#ffffff"
                 stroke={color}
-                strokeWidth={hoveredIndex === idx ? 3 : 2}
-                className="transition-all duration-150 cursor-pointer"
+                strokeWidth={hoveredIndex === idx ? 3.5 : 2}
+                className="transition-all duration-150 cursor-pointer shadow-md"
                 onMouseEnter={() => setHoveredIndex(idx)}
               />
               <rect
-                x={pt.x - 15}
+                x={pt.x - 18}
                 y={0}
-                width={30}
+                width={36}
                 height={chartHeight}
                 fill="transparent"
                 className="cursor-pointer"
@@ -175,6 +184,7 @@ export function AreaSplineChart({
             </g>
           ))}
 
+          {/* Crosshair */}
           {hoveredIndex !== null && points[hoveredIndex] && (
             <g>
               <line
@@ -185,21 +195,24 @@ export function AreaSplineChart({
                 stroke={color}
                 strokeWidth="1.5"
                 strokeDasharray="3 3"
-                opacity="0.6"
+                opacity="0.8"
               />
             </g>
           )}
         </svg>
 
+        {/* Floating Tooltip Pill */}
         {hoveredIndex !== null && points[hoveredIndex] && (
           <div
-            className="absolute -top-1 pointer-events-none transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2.5 py-1.5 rounded-xl shadow-md flex flex-col items-center border border-slate-800 z-10 animate-fade-in"
+            className="absolute -top-2 pointer-events-none transform -translate-x-1/2 bg-slate-900/95 dark:bg-white text-white dark:text-slate-900 text-xs px-3 py-1.5 rounded-xl shadow-xl flex flex-col items-center border border-slate-700/50 dark:border-slate-200 z-20 animate-fade-in backdrop-blur-md"
             style={{
               left: `${(points[hoveredIndex].x / width) * 100}%`,
             }}
           >
-            <span className="text-[10px] text-slate-400">{points[hoveredIndex].item.label}</span>
-            <span className="font-bold text-white">
+            <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">
+              {points[hoveredIndex].item.label}
+            </span>
+            <span className="font-extrabold text-white dark:text-slate-900 tracking-tight">
               {valuePrefix}
               {points[hoveredIndex].item.value.toLocaleString()}
               {valueSuffix}
@@ -208,13 +221,13 @@ export function AreaSplineChart({
         )}
       </div>
 
-      <div className="flex justify-between items-center text-[11px] text-slate-400 dark:text-slate-500 mt-2 px-4">
+      <div className="flex justify-between items-center text-[11px] font-medium text-slate-400 dark:text-slate-500 mt-2 px-4">
         {data.map((item, idx) => (
           <span
             key={idx}
             className={cn(
               'transition-colors',
-              hoveredIndex === idx ? 'text-indigo-600 dark:text-indigo-400 font-semibold' : ''
+              hoveredIndex === idx ? 'text-indigo-600 dark:text-indigo-400 font-bold' : ''
             )}
           >
             {item.label}

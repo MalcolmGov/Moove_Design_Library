@@ -9,11 +9,13 @@ export function Card({
   return (
     <div
       className={cn(
-        'bg-white dark:bg-slate-900 rounded-2xl border border-slate-100/90 dark:border-slate-800/80 shadow-xs hover:shadow-sm dark:shadow-none transition-all duration-200 p-5 overflow-hidden',
+        'card-depth rounded-2xl p-6 relative overflow-hidden group',
         className
       )}
       {...props}
     >
+      {/* Top subtle highlight rim */}
+      <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-slate-200/80 dark:via-slate-700/60 to-transparent pointer-events-none" />
       {children}
     </div>
   );
@@ -37,7 +39,7 @@ export function CardTitle({
   ...props
 }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
-    <h3 className={cn('text-sm font-semibold text-slate-800 dark:text-slate-100 tracking-tight', className)} {...props}>
+    <h3 className={cn('text-sm font-bold text-slate-900 dark:text-white tracking-tight', className)} {...props}>
       {children}
     </h3>
   );
