@@ -69,16 +69,43 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [themeId, setThemeId] = useState<ThemeId>('moove');
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [themeId, setThemeId] = useState<ThemeId>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('moove_theme_id') as ThemeId;
+      if (saved && THEMES[saved]) return saved;
+    }
+    return 'moove';
+  });
+
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('moove_dark_mode');
+      if (saved !== null) {
+        return saved === 'true';
+      }
+    }
+    return false; // Default to Light Mode as requested
+  });
 
   useEffect(() => {
     const root = document.documentElement;
     root.setAttribute('data-theme', themeId);
+    
     if (isDarkMode) {
       root.classList.add('dark');
+      document.body.classList.add('dark');
+      root.style.colorScheme = 'dark';
     } else {
       root.classList.remove('dark');
+      document.body.classList.remove('dark');
+      root.style.colorScheme = 'light';
+    }
+
+    try {
+      localStorage.setItem('moove_theme_id', themeId);
+      localStorage.setItem('moove_dark_mode', String(isDarkMode));
+    } catch {
+      // Ignore storage errors
     }
   }, [themeId, isDarkMode]);
 

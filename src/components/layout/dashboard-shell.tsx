@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Sidebar } from './sidebar';
 import { Topbar } from './topbar';
 import { ThemeDrawer } from '../showcase/theme-drawer';
@@ -17,7 +17,7 @@ export function DashboardShell({
   const [isThemeDrawerOpen, setIsThemeDrawerOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex bg-slate-50/60 font-sans">
+    <div className="min-h-screen flex bg-slate-50/70 dark:bg-slate-950 font-sans transition-colors duration-200">
       {/* Sidebar Navigation */}
       <Sidebar
         currentDashboardId={currentDashboardId}
