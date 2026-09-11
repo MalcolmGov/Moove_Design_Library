@@ -17,7 +17,8 @@ import {
   Building2,
   ShoppingBag,
   GraduationCap,
-  Megaphone
+  Megaphone,
+  Globe
 } from 'lucide-react';
 import { useTheme, THEMES } from '../../lib/theme-context';
 import { ThemeId } from '../../types';
@@ -164,7 +165,21 @@ export function CommandPalette({
                   onOpenThemeDrawer();
                   onClose();
                 }}
-                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors group"
+                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors group cursor-pointer"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Globe className="w-4 h-4 text-emerald-500" />
+                  <span>Auto-Brand from Website URL...</span>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-500" />
+              </button>
+
+              <button
+                onClick={() => {
+                  onOpenThemeDrawer();
+                  onClose();
+                }}
+                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors group cursor-pointer"
               >
                 <div className="flex items-center gap-2.5">
                   <Palette className="w-4 h-4 text-pink-500" />

@@ -114,6 +114,7 @@ export function DashboardShell({
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
   const [currentDateRange, setCurrentDateRange] = useState('Jun 1, 2025 - Jun 30, 2025');
   const [brandName, setBrandName] = useState('Moove Digital');
+  const [brandLogoUrl, setBrandLogoUrl] = useState<string | undefined>(undefined);
 
   // Code inspection drawer state
   const [codeDrawerState, setCodeDrawerState] = useState<{
@@ -162,6 +163,7 @@ export function DashboardShell({
         onSelectDashboard={onSelectDashboard}
         brandName={brandName}
         brandSubtitle="Design Library"
+        brandLogoUrl={brandLogoUrl}
       />
 
       {/* Main Content Area */}
@@ -197,7 +199,9 @@ export function DashboardShell({
         isOpen={isThemeDrawerOpen}
         onClose={() => setIsThemeDrawerOpen(false)}
         brandName={brandName}
+        brandLogoUrl={brandLogoUrl}
         onUpdateCustomBrand={(newName) => setBrandName(newName)}
+        onUpdateBrandLogo={(newLogo) => setBrandLogoUrl(newLogo)}
       />
 
       {/* Date Range Picker Popover Modal */}
