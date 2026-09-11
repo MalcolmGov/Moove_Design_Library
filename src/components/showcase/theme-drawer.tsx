@@ -19,6 +19,7 @@ import { useTheme, THEMES } from '../../lib/theme-context';
 import { ThemeId } from '../../types';
 import { cn } from '../../lib/utils';
 import { extractBrandFromUrl, ExtractedBrand } from '../../lib/brand-extractor';
+import { BrandLogoImage } from '../ui/brand-logo';
 
 export interface ThemeDrawerProps {
   isOpen: boolean;
@@ -30,6 +31,7 @@ export interface ThemeDrawerProps {
 }
 
 const QUICK_DEMO_URLS = [
+  'movedigital.africa',
   'stripe.com',
   'spotify.com',
   'airbnb.com',
@@ -47,11 +49,11 @@ export function ThemeDrawer({
   onUpdateBrandLogo,
   brandName = 'Moove Digital',
 }: ThemeDrawerProps) {
-  const { currentTheme, setTheme, isDarkMode, toggleDarkMode } = useTheme();
+  const { currentTheme, setTheme, setCustomTheme, isDarkMode, toggleDarkMode } = useTheme();
   const [activeTab, setActiveTab] = useState<'url' | 'presets' | 'custom'>('url');
   
   // URL Auto-brand extractor states
-  const [websiteUrl, setWebsiteUrl] = useState('stripe.com');
+  const [websiteUrl, setWebsiteUrl] = useState('movedigital.africa');
   const [isExtracting, setIsExtracting] = useState(false);
   const [scanStep, setScanStep] = useState<string | null>(null);
   const [extractedBrand, setExtractedBrand] = useState<ExtractedBrand | null>(null);
@@ -100,8 +102,16 @@ export function ThemeDrawer({
     }
   };
 
-  // Apply the extracted brand live to CSS variables, sidebar logo, and title
+  // Apply the extracted brand live to Theme Context, CSS variables, sidebar logo, and title
   const applyExtractedBrand = (brand: ExtractedBrand) => {
+    setCustomTheme({
+      name: brand.name,
+      primaryColor: brand.primaryColor,
+      accentColor: brand.accentColor,
+      borderRadius: brand.borderRadius,
+      logoUrl: brand.logoUrl,
+    });
+
     document.documentElement.style.setProperty('--color-primary', brand.primaryColor);
     document.documentElement.style.setProperty('--color-accent', brand.accentColor);
     document.documentElement.style.setProperty('--radius-card', brand.borderRadius);
@@ -119,6 +129,13 @@ export function ThemeDrawer({
 
   // Apply manual custom brand
   const applyCustomBrand = () => {
+    setCustomTheme({
+      name: clientName,
+      primaryColor: customPrimary,
+      accentColor: customAccent,
+      borderRadius: customRadius,
+    });
+
     document.documentElement.style.setProperty('--color-primary', customPrimary);
     document.documentElement.style.setProperty('--color-accent', customAccent);
     document.documentElement.style.setProperty('--radius-card', customRadius);
@@ -316,16 +333,13 @@ theme: {
                 <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/50 space-y-3.5 animate-fade-in">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 p-1.5 border border-slate-200 dark:border-slate-700 shadow-xs flex items-center justify-center shrink-0">
-                        <img
-                          src={extractedBrand.logoUrl}
-                          alt={extractedBrand.name}
-                          className="w-full h-full object-contain rounded-md"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                          }}
-                        />
-                      </div>
+                      <BrandLogoImage
+                        src={extractedBrand.logoUrl}
+                        name={extractedBrand.name}
+                        domain={extractedBrand.domain}
+                        color={extractedBrand.primaryColor}
+                        size="md"
+                      />
                       <div>
                         <h4 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                           <span>{extractedBrand.name}</span>

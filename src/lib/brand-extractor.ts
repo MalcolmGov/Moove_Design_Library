@@ -8,8 +8,32 @@ export interface ExtractedBrand {
   description?: string;
 }
 
-// Curated dictionary of top global brands for instant zero-latency demo precision
+// Curated dictionary of top brands and Moove Digital agency domains
 const BRAND_DATABASE: Record<string, Partial<ExtractedBrand>> = {
+  'movedigital.africa': {
+    name: 'Move Digital',
+    primaryColor: '#0cb4f6',
+    accentColor: '#1e3cb7',
+    borderRadius: '1rem',
+    logoUrl: 'https://movedigital.africa/og-image.jpg?v=2',
+    description: 'Enterprise AI & Fintech Infrastructure for Africa',
+  },
+  'moovedigital.africa': {
+    name: 'Moove Digital',
+    primaryColor: '#0cb4f6',
+    accentColor: '#1e3cb7',
+    borderRadius: '1rem',
+    logoUrl: 'https://movedigital.africa/og-image.jpg?v=2',
+    description: 'Enterprise AI & Fintech Infrastructure for Africa',
+  },
+  'moove.digital': {
+    name: 'Moove Digital',
+    primaryColor: '#6366f1',
+    accentColor: '#06b6d4',
+    borderRadius: '1rem',
+    logoUrl: 'https://unavatar.io/moove.digital',
+    description: 'Modern Product & Design Library Studio',
+  },
   'stripe.com': {
     name: 'Stripe',
     primaryColor: '#635BFF',
@@ -52,7 +76,7 @@ const BRAND_DATABASE: Record<string, Partial<ExtractedBrand>> = {
   },
   'notion.so': {
     name: 'Notion',
-    primaryColor: '#000000',
+    primaryColor: '#191919',
     accentColor: '#2eaadc',
     borderRadius: '0.5rem',
     logoUrl: 'https://unavatar.io/notion.so',
@@ -134,22 +158,18 @@ const BRAND_DATABASE: Record<string, Partial<ExtractedBrand>> = {
 
 /**
  * Normalizes user input into a clean hostname / domain
- * e.g. "https://www.stripe.com/pricing?q=1" -> "stripe.com"
+ * e.g. "https://www.movedigital.africa/" -> "movedigital.africa"
  */
 export function normalizeDomain(input: string): string {
   let cleaned = input.trim().toLowerCase();
-  // Remove leading protocol
   cleaned = cleaned.replace(/^https?:\/\//, '');
-  // Remove www.
   cleaned = cleaned.replace(/^www\./, '');
-  // Extract only hostname before any slash, query or port
   cleaned = cleaned.split('/')[0].split('?')[0].split(':')[0];
   return cleaned;
 }
 
 /**
  * Derives a clean human-readable brand name from a domain name
- * e.g. "acme-health.co.uk" -> "Acme Health"
  */
 function domainToBrandName(domain: string): string {
   const parts = domain.split('.');
@@ -161,111 +181,33 @@ function domainToBrandName(domain: string): string {
 }
 
 /**
- * Converts RGB numbers to hex string
+ * Clean page titles down to a brand name
+ * e.g. "Move Digital | Enterprise AI & Fintech..." -> "Move Digital"
  */
-function rgbToHex(r: number, g: number, b: number): string {
-  return (
-    '#' +
-    [r, g, b]
-      .map((x) => {
-        const hex = Math.min(255, Math.max(0, Math.round(x))).toString(16);
-        return hex.length === 1 ? '0' + hex : hex;
-      })
-      .join('')
-  );
+function cleanTitleToBrand(title: string): string {
+  if (!title) return '';
+  const firstChunk = title.split(/[|•–—:-]/)[0].trim();
+  return firstChunk || title.trim();
 }
 
 /**
- * Samples dominant colors from an image using HTML5 Canvas
+ * Validates whether a hex color is vibrant enough and not near pure black/white
  */
-async function sampleColorsFromImage(imgUrl: string): Promise<{ primary: string; accent: string } | null> {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      try {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return resolve(null);
+function isGoodBrandColor(hex: string): boolean {
+  if (!hex || !hex.startsWith('#') || hex.length < 7) return false;
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  if (isNaN(r) || isNaN(g) || isNaN(b)) return false;
 
-        const width = (canvas.width = Math.min(img.width, 64));
-        const height = (canvas.height = Math.min(img.height, 64));
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  // Ignore almost black or almost white
+  if (brightness < 20 || brightness > 245) return false;
 
-        ctx.drawImage(img, 0, 0, width, height);
-        const imgData = ctx.getImageData(0, 0, width, height).data;
-
-        const colorCounts: Record<string, { r: number; g: number; b: number; count: number; score: number }> = {};
-
-        for (let i = 0; i < imgData.length; i += 4) {
-          const r = imgData[i];
-          const g = imgData[i + 1];
-          const b = imgData[i + 2];
-          const a = imgData[i + 3];
-
-          // Ignore transparent or near-transparent pixels
-          if (a < 128) continue;
-
-          // Ignore pure white, near-white, pure black, or grayscale pixels
-          const max = Math.max(r, g, b);
-          const min = Math.min(r, g, b);
-          const delta = max - min;
-          const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-
-          // Filter out washed out whites/grays or deep blacks
-          if (brightness > 240 || brightness < 20 || delta < 18) continue;
-
-          // Quantize color into buckets of 16 to cluster similar tones
-          const bucketR = Math.round(r / 24) * 24;
-          const bucketG = Math.round(g / 24) * 24;
-          const bucketB = Math.round(b / 24) * 24;
-          const key = `${bucketR},${bucketG},${bucketB}`;
-
-          // Calculate saturation and vibrancy
-          const saturation = max === 0 ? 0 : delta / max;
-          const score = (saturation * 2 + 1) * (a / 255);
-
-          if (!colorCounts[key]) {
-            colorCounts[key] = { r: bucketR, g: bucketG, b: bucketB, count: 1, score };
-          } else {
-            colorCounts[key].count += 1;
-            colorCounts[key].score += score;
-          }
-        }
-
-        const sortedColors = Object.values(colorCounts).sort((a, b) => b.score - a.score);
-
-        if (sortedColors.length === 0) {
-          return resolve(null);
-        }
-
-        const primaryRgb = sortedColors[0];
-        const primaryHex = rgbToHex(primaryRgb.r, primaryRgb.g, primaryRgb.b);
-
-        // Derive high-contrast accent: look for second distinct color or shift hue
-        let accentHex = '#06b6d4';
-        if (sortedColors.length > 1) {
-          const secondRgb = sortedColors.find((c) => {
-            const dist = Math.sqrt(
-              Math.pow(c.r - primaryRgb.r, 2) +
-              Math.pow(c.g - primaryRgb.g, 2) +
-              Math.pow(c.b - primaryRgb.b, 2)
-            );
-            return dist > 60;
-          });
-          if (secondRgb) {
-            accentHex = rgbToHex(secondRgb.r, secondRgb.g, secondRgb.b);
-          }
-        }
-
-        resolve({ primary: primaryHex, accent: accentHex });
-      } catch {
-        resolve(null);
-      }
-    };
-
-    img.onerror = () => resolve(null);
-    img.src = imgUrl;
-  });
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  // Must have some color saturation (not pure gray)
+  return max - min > 15;
 }
 
 /**
@@ -278,46 +220,96 @@ export async function extractBrandFromUrl(inputUrl: string): Promise<ExtractedBr
     throw new Error('Please enter a valid website URL or domain name.');
   }
 
-  // Check Curated Database first for instant, authentic brand precision
+  // 1. Check Curated Database first for instant precision
   if (BRAND_DATABASE[domain]) {
     const record = BRAND_DATABASE[domain];
     return {
       name: record.name || domainToBrandName(domain),
       domain,
-      primaryColor: record.primaryColor || '#4f46e5',
+      primaryColor: record.primaryColor || '#6366f1',
       accentColor: record.accentColor || '#06b6d4',
       borderRadius: record.borderRadius || '1rem',
-      logoUrl: record.logoUrl || `https://unavatar.io/${domain}?fallback=https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
-      description: record.description || `Extracted brand assets for ${domain}`,
+      logoUrl: record.logoUrl || `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
+      description: record.description || `Verified brand assets for ${domain}`,
     };
   }
 
-  // For arbitrary custom domains:
-  const logoUrl = `https://unavatar.io/${domain}?fallback=https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
-  const fallbackName = domainToBrandName(domain);
-
-  // Try Canvas pixel color extraction from the domain's logo / favicon
-  let primaryColor = '#4f46e5';
-  let accentColor = '#06b6d4';
-
+  // 2. Query Microlink Headless Live Metadata & Palette Engine (CORS enabled)
   try {
-    const sampled = await sampleColorsFromImage(logoUrl);
-    if (sampled) {
-      primaryColor = sampled.primary;
-      accentColor = sampled.accent;
-    } else {
-      // Deterministic hash-based pleasant default palette if logo cannot be canvas-sampled
-      let hash = 0;
-      for (let i = 0; i < domain.length; i++) {
-        hash = domain.charCodeAt(i) + ((hash << 5) - hash);
+    const targetUrl = inputUrl.startsWith('http') ? inputUrl : `https://${domain}`;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+    const response = await fetch(
+      `https://api.microlink.io?url=${encodeURIComponent(targetUrl)}&palette=true`,
+      { signal: controller.signal }
+    );
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+      const json = await response.json();
+      const data = json.data;
+
+      if (data) {
+        // Extract brand name
+        const brandName =
+          data.publisher ||
+          cleanTitleToBrand(data.title) ||
+          domainToBrandName(domain);
+
+        // Extract logo
+        const logoUrl =
+          data.image?.url ||
+          data.logo?.url ||
+          `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+
+        // Extract colors
+        let primaryColor = '#6366f1';
+        let accentColor = '#06b6d4';
+
+        // Check image/logo palette from Microlink
+        if (data.image?.color && isGoodBrandColor(data.image.color)) {
+          primaryColor = data.image.color;
+        } else if (data.image?.palette && Array.isArray(data.image.palette)) {
+          const goodColor = data.image.palette.find(isGoodBrandColor);
+          if (goodColor) primaryColor = goodColor;
+        }
+
+        if (data.image?.alternative_color && isGoodBrandColor(data.image.alternative_color)) {
+          accentColor = data.image.alternative_color;
+        } else if (data.image?.palette && Array.isArray(data.image.palette)) {
+          const secondColor = data.image.palette.find(
+            (c: string) => isGoodBrandColor(c) && c !== primaryColor
+          );
+          if (secondColor) accentColor = secondColor;
+        }
+
+        return {
+          name: brandName,
+          domain,
+          primaryColor,
+          accentColor,
+          borderRadius: '1rem',
+          logoUrl,
+          description: data.description || `Live brand extracted from ${domain}`,
+        };
       }
-      const hue = Math.abs(hash % 360);
-      primaryColor = `hsl(${hue}, 70%, 50%)`;
-      accentColor = `hsl(${(hue + 45) % 360}, 85%, 55%)`;
     }
   } catch {
-    // Keep defaults
+    // Fallback continues below
   }
+
+  // 3. Fallback to Google Favicon service and pleasant hash-based palette
+  const logoUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+  const fallbackName = domainToBrandName(domain);
+
+  let hash = 0;
+  for (let i = 0; i < domain.length; i++) {
+    hash = domain.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const hue = Math.abs(hash % 360);
+  const primaryColor = `hsl(${hue}, 75%, 48%)`;
+  const accentColor = `hsl(${(hue + 50) % 360}, 85%, 55%)`;
 
   return {
     name: fallbackName,
@@ -326,6 +318,6 @@ export async function extractBrandFromUrl(inputUrl: string): Promise<ExtractedBr
     accentColor,
     borderRadius: '1rem',
     logoUrl,
-    description: `Brand automatically detected and extracted from ${domain}`,
+    description: `Brand detected from ${domain}`,
   };
 }

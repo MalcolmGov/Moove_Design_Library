@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { ThemeId, ThemeConfig } from '../types';
 
 export const THEMES: Record<ThemeId, ThemeConfig> = {
@@ -59,9 +59,18 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
   },
 };
 
+export interface CustomThemeOverrides {
+  name?: string;
+  primaryColor?: string;
+  accentColor?: string;
+  borderRadius?: string;
+  logoUrl?: string;
+}
+
 interface ThemeContextType {
   currentTheme: ThemeConfig;
   setTheme: (themeId: ThemeId) => void;
+  setCustomTheme: (overrides: CustomThemeOverrides) => void;
   isDarkMode: boolean;
   toggleDarkMode: () => void;
 }
@@ -77,6 +86,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return 'moove';
   });
 
+  const [customOverrides, setCustomOverrides] = useState<CustomThemeOverrides | null>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('moove_custom_overrides');
+        if (saved) return JSON.parse(saved);
+      } catch {}
+    }
+    return null;
+  });
+
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('moove_dark_mode');
@@ -84,13 +103,30 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         return saved === 'true';
       }
     }
-    return false; // Default to Light Mode as requested
+    return false; // Default to Light Mode
   });
+
+  const activeThemeConfig = useMemo<ThemeConfig>(() => {
+    const base = THEMES[themeId];
+    if (!customOverrides) return base;
+    return {
+      ...base,
+      name: customOverrides.name || base.name,
+      primaryColor: customOverrides.primaryColor || base.primaryColor,
+      accentColor: customOverrides.accentColor || base.accentColor,
+      borderRadius: customOverrides.borderRadius || base.borderRadius,
+    };
+  }, [themeId, customOverrides]);
 
   useEffect(() => {
     const root = document.documentElement;
     root.setAttribute('data-theme', themeId);
     
+    // Live update CSS custom properties for Tailwind / styles
+    root.style.setProperty('--color-primary', activeThemeConfig.primaryColor);
+    root.style.setProperty('--color-accent', activeThemeConfig.accentColor);
+    root.style.setProperty('--radius-card', activeThemeConfig.borderRadius);
+
     if (isDarkMode) {
       root.classList.add('dark');
       document.body.classList.add('dark');
@@ -104,13 +140,23 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     try {
       localStorage.setItem('moove_theme_id', themeId);
       localStorage.setItem('moove_dark_mode', String(isDarkMode));
+      if (customOverrides) {
+        localStorage.setItem('moove_custom_overrides', JSON.stringify(customOverrides));
+      } else {
+        localStorage.removeItem('moove_custom_overrides');
+      }
     } catch {
       // Ignore storage errors
     }
-  }, [themeId, isDarkMode]);
+  }, [themeId, isDarkMode, activeThemeConfig, customOverrides]);
 
   const setTheme = (id: ThemeId) => {
+    setCustomOverrides(null);
     setThemeId(id);
+  };
+
+  const setCustomTheme = (overrides: CustomThemeOverrides) => {
+    setCustomOverrides(overrides);
   };
 
   const toggleDarkMode = () => {
@@ -120,8 +166,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return (
     <ThemeContext.Provider
       value={{
-        currentTheme: THEMES[themeId],
+        currentTheme: activeThemeConfig,
         setTheme,
+        setCustomTheme,
         isDarkMode,
         toggleDarkMode,
       }}

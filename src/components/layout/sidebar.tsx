@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../lib/theme-context';
+import { BrandLogoImage } from '../ui/brand-logo';
 
 export interface SidebarProps {
   currentDashboardId: string;
@@ -68,27 +69,12 @@ export function Sidebar({
       <div>
         <div className="p-5 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-3 min-w-0">
-            {brandLogoUrl ? (
-              <div className="w-9 h-9 rounded-xl overflow-hidden bg-white dark:bg-slate-800 p-1 border border-slate-200/80 dark:border-slate-700 shadow-2xs shrink-0 flex items-center justify-center">
-                <img
-                  src={brandLogoUrl}
-                  alt={brandName}
-                  className="w-full h-full object-contain rounded-lg"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
-              </div>
-            ) : (
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-xs shrink-0"
-                style={{ backgroundColor: currentTheme.primaryColor }}
-              >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                </svg>
-              </div>
-            )}
+            <BrandLogoImage
+              src={brandLogoUrl}
+              name={brandName}
+              color={currentTheme.primaryColor}
+              size="md"
+            />
             <div className="min-w-0">
               <h2 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-none truncate">{brandName}</h2>
               <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-1 truncate">{brandSubtitle}</p>
